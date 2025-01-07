@@ -1,9 +1,4 @@
 @font-face {
-    font-family: 'Noto';
-    src: url(../assets/NotoSansKR-VariableFont_wght.ttf);
-}
-  
-@font-face {
     font-family: 'GMP Icons';
     src: url(../assets/GMPIcons.woff2);
 }
@@ -62,7 +57,9 @@ body {
     display: flex;
     height: 40px;
     align-items: center;
+    font-family: 'Noto Sans', serif;
     border: 1px solid rgb(210,213,218);
+    padding-right: 9px;
     border-radius: 5px 5px 0px 0px;
     justify-content: center;
 }
@@ -74,10 +71,8 @@ a {
 .firebase {
     width: 160px;
     color: rgb(59,68,81);
-    font-family: 'Noto';
     font-size: 15px;
     font-weight: 400;
-    padding-right: 9px;
 }
 
 .firebaseImg {
@@ -92,12 +87,9 @@ a {
 
 .gtm {
     width: 170px;
-    font-family: 'Noto';
     font-size: 15px;
     font-weight: 400;
-    padding-right: 9px;
     color: rgb(59,68,81);
-    /* border-bottom: none; */
 }
 
 .gaImg {
@@ -107,10 +99,8 @@ a {
 
 .gaTester {
     width: 120px;
-    font-family: 'Noto';
     font-size: 15px;
     font-weight: 500;
-    padding-right: 9px;
     color: rgb(86,90,232);
     background-color: rgb(242,245,249);
     border-bottom: 1px solid rgb(242,245,249);
