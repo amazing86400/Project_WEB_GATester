@@ -4,33 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVYW8HV971"></script>
+    <script src="./js/analytics.js"></script>
     <script src="./js/common.js"></script>
     <title>GATester</title>
   </head>
   <body>
     <div class="header">
-      <img class="logoImg" src="assets/logo.png">
+      <img class="logoImg" src="assets/logo.png" />
       <div class="contact" onclick="contactUs();">Contact Us</div>
     </div>
     <div class="container">
       <div class="containerHeader">
         <a href="../../GTMgenerator/Source/main.html">
-          <div class="gaTester">
-            <img class="gaImg" src="assets/gaLogo.svg">GA Tester</div>
+          <div class="gaTester"><img class="gaImg" src="assets/gaLogo.svg" />GA Tester</div>
         </a>
         <a href="main.html">
-          <div class="firebase">
-            <img class="firebaseImg" src="assets/firebaseLogo.png">Data Inspector
-          </div>
+          <div class="firebase"><img class="firebaseImg" src="assets/firebaseLogo.png" />Data Inspector</div>
         </a>
         <a href="../../GTMgenerator/Source/main.html">
-          <div class="gtm">
-            <img class="gtmImg" src="assets/gtmLogo.png">GTM Generator</div>
+          <div class="gtm"><img class="gtmImg" src="assets/gtmLogo.png" />GTM Generator</div>
         </a>
         <div class="line"></div>
       </div>
+
+      <!-- 콘텐츠 영역 -->
       <div class="contentContainer">
         <div class="eventType">
           <div class="event select">페이지뷰</div>
@@ -38,69 +37,60 @@
           <div class="event">전자상거래</div>
         </div>
         <div class="content">
-          <div class ="requiredValue">
-            <div>
-              <div class="inputArea">
-                <div>page_title:</div><input class="input">,
-              </div>
-              <div class="inputArea">
-                <div>page_loacation:</div><input class="input">,
-              </div>
-              <div class="inputArea">
-                <select name=drop>
-                  <option value="contents_group">contents_group</option>
-                  <option value="user_id">user_id</option>
-                </select>:
-                <input  class="input">,
-              </div>
-              <div class="plus">+</div>
+          <div class="section">
+            <div class="sessionTitle">페이지 설정</div>
+            <div class="inputGroup">
+              <label for="pageTitle">페이지 제목:</label>
+              <input id="pageTitle" class="formInput" type="text" value="GATester" />
+            </div>
+            <div class="inputGroup">
+              <label for="pageURL">페이지 주소:</label>
+              <input id="pageURL" class="formInput" type="text" value="https://www.gatester.com/" />
             </div>
           </div>
-          <div class ="eventParameter">
-            <div>
-              <div class="inputArea">
-                <div>ep_page_param1:</div><input class="input">,
-              </div>
-              <div class="inputArea">
-                <div>ep_page_param2:</div><input class="input">,
-              </div>
-              <div class="plus">+</div>
+          <hr />
+          <div class="section">
+            <div class="sessionTitle">사전 정의된 매개변수</div>
+            <div class="inputGroup">
+              <select class="dropdown">
+                <option value="contents_group">콘텐츠 그룹</option>
+                <option value="user_id">사용자 ID</option>
+              </select>
+              <input class="formInput" type="text" />
+              <button class="removeButton">-</button>
             </div>
+            <button class="addInput">매개변수 추가</button>
+          </div>
+          <hr />
+          <div class="section">
+            <div class="sessionTitle">이벤트 매개변수</div>
+            <div class="parameterGroup">
+              <input class="formInput" type="text" />
+              <input class="formInput" type="text" />
+              <select class="typeDropdown">
+                <option value="str">Str</option>
+                <option value="num">Num</option>
+              </select>
+              <button class="removeButton">-</button>
+            </div>
+            <button class="addInput">매개변수 추가</button>
+          </div>
+          <hr />
+          <div class="section">
+            <div class="sessionTitle">사용자 속성</div>
+            <div class="parameterGroup">
+              <input class="formInput" type="text" />
+              <input class="formInput" type="text" />
+              <select class="typeDropdown">
+                <option value="str">Str</option>
+                <option value="num">Num</option>
+              </select>
+              <button class="removeButton">-</button>
+            </div>
+            <button class="addInput">속성 추가</button>
           </div>
         </div>
       </div>
     </div>
-    <!-- <h2>이벤트 이름</h2>
-    <input class="event-name" type="text" />
-    <h2>이벤트 매개변수</h2>
-    <div>
-      <input class="key event-param" type="text" value="event_parameter1" />
-      <input class="value event-param" type="text" />
-    </div>
-    <div>
-      <input class="key event-param" type="text" value="event_parameter2" />
-      <input class="value event-param" type="text" />
-    </div>
-    <div>
-      <input class="key event-param" type="text" value="event_parameter3" />
-      <input class="value event-param" type="text" />
-    </div>
-
-    <h2>사용자 속성</h2>
-    <div>
-      <input class="key user-property" type="text" value="user_property1" />
-      <input class="value user-property" type="text" />
-    </div>
-    <div>
-      <input class="key user-property" type="text" value="user_property2" />
-      <input class="value user-property" type="text" />
-    </div>
-    <div>
-      <input class="key user-property" type="text" value="user_property3" />
-      <input class="value user-property" type="text" />
-    </div>
-
-    <br />
-    <input type="button" value="제출" onclick="sendData()" /> -->
   </body>
 </html>
