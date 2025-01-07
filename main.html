@@ -3,29 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <head>
-      <script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-VVYW8HV971"
-      ></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-
-        gtag("js", new Date());
-        gtag("config", "G-VVYW8HV971", {
-          page_title: "GATester",
-        });
-      </script>
-      <script src="./js/common.js"></script>
-    </head>
+    <link rel="stylesheet" href="css/style.css" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVYW8HV971"></script>
+    <script src="./js/common.js"></script>
     <title>GATester</title>
   </head>
   <body>
-    <h2>이벤트 이름</h2>
+    <div class="header">
+      <img class="logoImg" src="assets/logo.png">
+      <div class="contact" onclick="contactUs();">Contact Us</div>
+    </div>
+    <div class="container">
+      <div class="containerHeader">
+        <a href="../../GTMgenerator/Source/main.html">
+          <div class="gaTester">
+            <img class="gaImg" src="assets/gaLogo.svg">GA Tester</div>
+        </a>
+        <a href="main.html">
+          <div class="firebase">
+            <img class="firebaseImg" src="assets/firebaseLogo.png">Data Inspector
+          </div>
+        </a>
+        <a href="../../GTMgenerator/Source/main.html">
+          <div class="gtm">
+            <img class="gtmImg" src="assets/gtmLogo.png">GTM Generator</div>
+        </a>
+        <div class="line"></div>
+      </div>
+      <div class="contentContainer">
+        <div class="eventType">
+          <div class="event select">페이지뷰</div>
+          <div class="event">이벤트</div>
+          <div class="event">전자상거래</div>
+        </div>
+        <div class="content">
+          <div class ="requiredValue">
+            <div>
+              <div class="inputArea">
+                <div>page_title:</div><input class="input">,
+              </div>
+              <div class="inputArea">
+                <div>page_loacation:</div><input class="input">,
+              </div>
+              <div class="inputArea">
+                <select name=drop>
+                  <option value="contents_group">contents_group</option>
+                  <option value="user_id">user_id</option>
+                </select>:
+                <input  class="input">,
+              </div>
+              <div class="plus">+</div>
+            </div>
+          </div>
+          <div class ="eventParameter">
+            <div>
+              <div class="inputArea">
+                <div>ep_page_param1:</div><input class="input">,
+              </div>
+              <div class="inputArea">
+                <div>ep_page_param2:</div><input class="input">,
+              </div>
+              <div class="plus">+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <h2>이벤트 이름</h2>
     <input class="event-name" type="text" />
     <h2>이벤트 매개변수</h2>
     <div>
@@ -56,6 +100,6 @@
     </div>
 
     <br />
-    <input type="button" value="제출" onclick="sendData()" />
+    <input type="button" value="제출" onclick="sendData()" /> -->
   </body>
 </html>

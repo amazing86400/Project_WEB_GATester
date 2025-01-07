@@ -1,3 +1,14 @@
+window.dataLayer = window.dataLayer || [];
+          
+function gtag() {
+  dataLayer.push(arguments);
+}
+
+gtag("js", new Date());
+gtag("config", "G-VVYW8HV971", {
+  page_title: "GATester",
+});
+
 // TO-DO: 정의 변수 치환 함수
 function mappingTable() {
   const map = {
