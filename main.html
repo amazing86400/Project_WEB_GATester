@@ -3,7 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <head>
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-VVYW8HV971"
+      ></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+
+        gtag("js", new Date());
+        gtag("config", "G-VVYW8HV971", {
+          page_title: "GATester",
+        });
+      </script>
+      <script src="./js/common.js"></script>
+    </head>
     <title>GATester</title>
   </head>
-  <body></body>
+  <body>
+    <h2>이벤트 이름</h2>
+    <input class="event-name" type="text" />
+    <h2>이벤트 매개변수</h2>
+    <div>
+      <input class="key event-param" type="text" value="event_parameter1" />
+      <input class="value event-param" type="text" />
+    </div>
+    <div>
+      <input class="key event-param" type="text" value="event_parameter2" />
+      <input class="value event-param" type="text" />
+    </div>
+    <div>
+      <input class="key event-param" type="text" value="event_parameter3" />
+      <input class="value event-param" type="text" />
+    </div>
+
+    <h2>사용자 속성</h2>
+    <div>
+      <input class="key user-property" type="text" value="user_property1" />
+      <input class="value user-property" type="text" />
+    </div>
+    <div>
+      <input class="key user-property" type="text" value="user_property2" />
+      <input class="value user-property" type="text" />
+    </div>
+    <div>
+      <input class="key user-property" type="text" value="user_property3" />
+      <input class="value user-property" type="text" />
+    </div>
+
+    <br />
+    <input type="button" value="제출" onclick="sendData()" />
+  </body>
 </html>
