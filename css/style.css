@@ -146,8 +146,7 @@ a {
   flex-direction: column;
   justify-content: center;
   background-color: #fff;
-  width: 700px;
-  height: 800px;
+  margin: 10px;
   border-radius: 10px;
 }
 
