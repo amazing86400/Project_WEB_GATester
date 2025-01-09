@@ -39,11 +39,12 @@
 
         <div class="content setData">
           <div class="section">
+            <button onclick="setInitValue()">초기값</button>
             <div class="sessionTitle">페이지 설정</div>
             <div class="inputGroup">
               <label for="pageTitle">페이지 제목:</label>
               <input id="pageTitle" class="formInput" type="text" value="GATester" />
-              <select class="typeDropdown">
+              <select class="typeDropdown titleType">
                 <option value="str">Str</option>
                 <option value="num">Num</option>
               </select>
@@ -51,7 +52,7 @@
             <div class="inputGroup">
               <label for="pageURL">페이지 주소:</label>
               <input id="pageURL" class="formInput" type="text" value="https://www.gatester.com/" />
-              <select class="typeDropdown">
+              <select class="typeDropdown locationType">
                 <option value="str">Str</option>
                 <option value="num">Num</option>
               </select>
@@ -65,21 +66,21 @@
                 <option value="contents_group">콘텐츠 그룹</option>
                 <option value="user_id">사용자 ID</option>
               </select>
-              <input class="formInput" type="text" />
+              <input class="formInput formValue" type="text" placeholder="값 입력" />
               <select class="typeDropdown">
                 <option value="str">Str</option>
                 <option value="num">Num</option>
               </select>
               <button class="removeButton" onclick="removeInput(this)">-</button>
             </div>
-            <button class="addInput" onclick="addInput('preParam')">매개변수 추가</button>
+            <button class="addInput" onclick="addInput()">매개변수 추가</button>
           </div>
           <hr />
           <div class="section eventParam">
             <div class="sessionTitle">이벤트 매개변수</div>
             <div class="parameterGroup">
-              <input class="formInput" type="text" />
-              <input class="formInput" type="text" />
+              <input class="formInput formKey" type="text" value="event_parameter1" />
+              <input class="formInput formValue" type="text" placeholder="값 입력" />
               <select class="typeDropdown">
                 <option value="str">Str</option>
                 <option value="num">Num</option>
@@ -88,22 +89,28 @@
             </div>
             <div class="controls">
               <button class="addInput" onclick="addMultipleInputs('eventParam')">매개변수 추가</button>
-              <input id="eventAddCount" type="number" value="1" min="1" max="10" />
+              <input id="eventAddCount" type="number" value="1" min="1" max="200" />
             </div>
           </div>
           <hr />
           <div class="section userProperty">
             <div class="sessionTitle">사용자 속성</div>
             <div class="parameterGroup">
-              <input class="formInput" type="text" />
-              <input class="formInput" type="text" />
+              <input class="formInput formKey" type="text" value="user_property1" />
+              <input class="formInput formValue" type="text" placeholder="값 입력" />
               <select class="typeDropdown">
                 <option value="str">Str</option>
                 <option value="num">Num</option>
               </select>
               <button class="removeButton" onclick="removeInput(this)">-</button>
             </div>
-            <button class="addInput" onclick="addInput('userProperty')">속성 추가</button>
+            <div class="controls">
+              <button class="addInput" onclick="addMultipleInputs('userProperty')">속성 추가</button>
+              <input id="userAddCount" type="number" value="1" min="1" max="200" />
+            </div>
+          </div>
+          <div>
+            <button id="fireButton" onclick="">이벤트 전송하기</button>
           </div>
         </div>
 

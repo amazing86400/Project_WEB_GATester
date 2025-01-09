@@ -1,3 +1,11 @@
+let eventParamCounter = 2; // 이벤트 매개변수 카운터 초기화
+let userPropertyCounter = 2; // 사용자 속성 카운터 초기화
+let gaData = {
+  eventParam: {},
+  userProperty: {},
+  items: [{}],
+};
+
 // 데이터 업데이트 함수
 function updateDataObject() {
   const dataObject = {};
@@ -5,8 +13,13 @@ function updateDataObject() {
   // 페이지 제목 및 페이지 주소 설정
   const pageTitle = document.getElementById("pageTitle").value;
   const pageURL = document.getElementById("pageURL").value;
-  dataObject.page_title = pageTitle;
-  dataObject.page_location = pageURL;
+  const titleType = document.querySelector(".titleType").value;
+  const locationType = document.querySelector(".locationType").value;
+  dataObject.page_title = titleType === "num" ? Number(pageTitle) : pageTitle;
+  dataObject.page_location = locationType === "num" ? Number(pageURL) : pageURL;
+
+  gaData.eventParam.page_title = titleType === "num" ? Number(pageTitle) : pageTitle;
+  gaData.eventParam.page_location = locationType === "num" ? Number(pageURL) : pageURL;
 
   // 사전 정의된 매개변수 설정
   const preParams = document.querySelectorAll(".section.preParam .inputGroup");
@@ -16,6 +29,7 @@ function updateDataObject() {
     const paramType = group.querySelector(".typeDropdown").value;
     if (dropdown && input) {
       dataObject[dropdown] = paramType === "num" ? Number(input) : input;
+      gaData.eventParam[dropdown] = paramType === "num" ? Number(input) : input;
     }
   });
 
@@ -23,11 +37,12 @@ function updateDataObject() {
   const eventParams = document.querySelectorAll(".section.eventParam .parameterGroup");
   eventParams.forEach((group) => {
     const paramName = group.querySelectorAll(".formInput")[0].value;
-    const paramValue = group.querySelectorAll(".formInput")[1].value ? group.querySelectorAll(".formInput")[1].value : "";
+    const paramValue = group.querySelectorAll(".formInput")[1].value;
     const paramType = group.querySelector(".typeDropdown").value;
 
-    if (paramName) {
+    if (paramName && paramValue) {
       dataObject[`${paramName}`] = paramType === "num" ? Number(paramValue) : paramValue;
+      gaData.eventParam[`${paramName}`] = paramType === "num" ? Number(paramValue) : paramValue;
     }
   });
 
@@ -35,11 +50,12 @@ function updateDataObject() {
   const userProperties = document.querySelectorAll(".section.userProperty .parameterGroup");
   userProperties.forEach((group) => {
     const propName = group.querySelectorAll(".formInput")[0].value;
-    const propValue = group.querySelectorAll(".formInput")[1].value ? group.querySelectorAll(".formInput")[1].value : "";
+    const propValue = group.querySelectorAll(".formInput")[1].value;
     const propType = group.querySelector(".typeDropdown").value;
 
-    if (propName) {
+    if (propName && propValue) {
       dataObject[`${propName}`] = propType === "num" ? Number(propValue) : propValue;
+      gaData.userProperty[`${propName}`] = propType === "num" ? Number(propValue) : propValue;
     }
   });
 
@@ -59,39 +75,19 @@ function bindRealTimeUpdate() {
 }
 
 // 새로운 요소 추가 시 업데이트
-function addInput(type) {
-  if (type == "preParam") {
-    const optionCnt = document.querySelectorAll(
-      "body > div.container > div.contentContainer > div.content.setData > div.section.preParam > div:nth-child(2) > select.dropdown > option"
-    ).length;
-    const inputCnt = document.querySelectorAll(
-      "body > div.container > div.contentContainer > div.content.setData > div.section.preParam > div.inputGroup"
-    ).length;
-    if (inputCnt < optionCnt) {
-      const addButton = document.querySelector(".section.preParam .addInput");
-      addButton.insertAdjacentHTML(
-        "beforebegin",
-        `<div class="inputGroup">
+function addInput() {
+  const optionCnt = document.querySelectorAll("body > div.container > div.contentContainer > div.content.setData > div.section.preParam > div:nth-child(2) > select.dropdown > option").length;
+  const inputCnt = document.querySelectorAll("body > div.container > div.contentContainer > div.content.setData > div.section.preParam > div.inputGroup").length;
+  if (inputCnt < optionCnt) {
+    const addButton = document.querySelector(".section.preParam .addInput");
+    addButton.insertAdjacentHTML(
+      "beforebegin",
+      `<div class="inputGroup">
         <select class="dropdown">
           <option value="contents_group">콘텐츠 그룹</option>
           <option value="user_id">사용자 ID</option>
         </select>
-        <input class="formInput" type="text" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num">Num</option>
-        </select>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>`
-      );
-    }
-  } else if (type == "eventParam") {
-    const addButton = document.querySelector(".section.eventParam .addInput");
-    addButton.insertAdjacentHTML(
-      "beforebegin",
-      `<div class="parameterGroup">
-        <input class="formInput" type="text" />
-        <input class="formInput" type="text" />
+        <input class="formInput formValue" type="text" />
         <select class="typeDropdown">
           <option value="str">Str</option>
           <option value="num">Num</option>
@@ -99,37 +95,24 @@ function addInput(type) {
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>`
     );
-  } else if (type == "userProperty") {
-    const addButton = document.querySelector(".section.userProperty .addInput");
-    addButton.insertAdjacentHTML(
-      "beforebegin",
-      `<div class="parameterGroup">
-        <input class="formInput" type="text" />
-        <input class="formInput" type="text" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num">Num</option>
-        </select>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>`
-    );
+  } else {
+    alert("모든 매개변수가 추가되었습니다.");
   }
   bindRealTimeUpdate(); // 새로 추가된 요소에도 이벤트 바인딩
 }
 
 function addMultipleInputs(type) {
-  if (type === "eventParam") {
-    const addCountInput = document.getElementById("eventAddCount");
-    const count = parseInt(addCountInput.value, 10); // 입력된 숫자 가져오기
+  const addCountInput = type === "eventParam" ? document.getElementById("eventAddCount") : document.getElementById("userAddCount");
+  const count = parseInt(addCountInput.value, 10);
+  const addButton = type === "eventParam" ? document.querySelector(".section.eventParam .addInput") : document.querySelector(".section.userProperty .addInput");
 
-    const addButton = document.querySelector(".section.eventParam .addInput");
-
-    for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i++) {
+    if (type === "eventParam") {
       addButton.insertAdjacentHTML(
         "beforebegin",
         `<div class="parameterGroup">
-          <input class="formInput" type="text" />
-          <input class="formInput" type="text" />
+          <input class="formInput formKey" type="text" value="event_parameter${eventParamCounter}" />
+          <input class="formInput formValue" type="text" placeholder="값 입력" />
           <select class="typeDropdown">
             <option value="str">Str</option>
             <option value="num">Num</option>
@@ -137,11 +120,26 @@ function addMultipleInputs(type) {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );
+      eventParamCounter++;
+    } else if (type === "userProperty") {
+      addButton.insertAdjacentHTML(
+        "beforebegin",
+        `<div class="parameterGroup">
+          <input class="formInput formKey" type="text" value="user_property${userPropertyCounter}" />
+          <input class="formInput formValue" type="text" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>`
+      );
+      userPropertyCounter++;
     }
-
-    bindRealTimeUpdate(); // 새로 추가된 요소에 이벤트 바인딩
-    updateDataObject(); // 데이터 업데이트
   }
+
+  bindRealTimeUpdate(); // 새로 추가된 요소에 이벤트 바인딩
+  updateDataObject(); // 데이터 업데이트
 }
 
 // 삭제 함수
@@ -151,6 +149,15 @@ function removeInput(button) {
     parent.remove();
     updateDataObject(); // 삭제 후 데이터 업데이트
   }
+}
+
+// 초기값 설정 함수
+function setInitValue() {
+  const formValues = document.querySelectorAll(".formValue");
+  formValues.forEach((formValue) => {
+    formValue.value = "신기범짱";
+  });
+  updateDataObject();
 }
 
 // 초기화 실행

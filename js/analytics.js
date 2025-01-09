@@ -9,16 +9,6 @@ gtag("config", "G-VVYW8HV971", {
   page_title: "GATester",
 });
 
-// TO-DO: 정의 변수 치환 함수
-function mappingTable() {
-  const map = {
-    "페이지 제목": "page_title",
-    "페이지 주소": "page_location",
-    "콘텐츠 그룹": "content_group",
-    "사용자 ID": "user_id",
-  };
-}
-
 // 맞춤 정의 데이터 설정 함수
 // 데이터 타입 추가 필요
 function collectData(className, prefix) {
@@ -49,12 +39,14 @@ function collectData(className, prefix) {
 // 전자상거래 추가 필요
 function sendData() {
   try {
+    const rawData = JSON.parse(document.querySelector("body > div.container > div.contentContainer > div.content.viewData > pre").textContent);
+
     const eventName = document.getElementsByClassName("event-name")[0].value;
-    const eventParam = collectData("value event-param", "event_parameter");
-    const userProperty = collectData("value user-property", "user_property");
+    const eventParam = gaData.eventParam;
+    const userProperty = gaData.userProperty;
 
     if (userProperty) {
-      gtag("set", "user_properties", { ...userProperty });
+      gtag("set", "user_properties", userProperty);
     }
 
     gtag("event", eventName, { ...eventParam });
