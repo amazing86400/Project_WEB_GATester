@@ -20,7 +20,8 @@ function sendGAData() {
     if (document.querySelector(".event.select").textContent === "페이지뷰") {
       eventName = "page_view";
     } else {
-      eventName = document.querySelector(".eventName").textContent;
+      eventName = eventParam["event_name"];
+      delete eventParam["event_name"];
     }
 
     if (userProperty) {

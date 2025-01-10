@@ -117,23 +117,30 @@ a {
   justify-content: center;
 }
 
-.eventType {
-  margin-right: 0px;
+#eventType {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .event {
-  width: 100px;
-  height: 40px;
+  width: 90px;
+  height: 30px;
   background-color: #a6cbff;
-  margin-top: 20px;
+  margin-bottom: 10px;
   border-radius: 4px;
-  text-align: center;
-  align-content: center;
   color: #fff;
 }
 
-.select {
-  margin-right: 0px;
+.event:hover {
+  background-color: #1a73e8;
+}
+
+.event.select {
+  background-color: #1a73e8;
+  color: #fff;
+  font-weight: bold;
+  border: 2px solid #0a58ca;
 }
 
 /* 콘텐츠 영역 */
