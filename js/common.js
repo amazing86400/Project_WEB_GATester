@@ -1,6 +1,7 @@
 let eventParamCounter = 2; // 이벤트 매개변수 카운터 초기화
 let userPropertyCounter = 2; // 사용자 속성 카운터 초기화
 let gaData = {
+  eventName: "",
   eventParam: {},
   userProperty: {},
   items: [{}],
@@ -22,45 +23,45 @@ function updateDataObject() {
   gaData.eventParam.page_location = locationType === "num" ? Number(pageURL) : pageURL;
 
   // 사전 정의된 매개변수 설정
-  const preParams = document.querySelectorAll(".section.preParam .inputGroup");
+  const preParams = document.querySelectorAll("#preParam .inputGroup");
   preParams.forEach((group) => {
     const dropdown = group.querySelector(".dropdown").value;
     const input = group.querySelector(".formInput").value;
     const paramType = group.querySelector(".typeDropdown").value;
-    if (dropdown && input) {
+    if (dropdown) {
       dataObject[dropdown] = paramType === "num" ? Number(input) : input;
       gaData.eventParam[dropdown] = paramType === "num" ? Number(input) : input;
     }
   });
 
   // 이벤트 매개변수 설정
-  const eventParams = document.querySelectorAll(".section.eventParam .parameterGroup");
+  const eventParams = document.querySelectorAll("#eventParam .parameterGroup");
   eventParams.forEach((group) => {
     const paramName = group.querySelectorAll(".formInput")[0].value;
     const paramValue = group.querySelectorAll(".formInput")[1].value;
     const paramType = group.querySelector(".typeDropdown").value;
 
-    if (paramName && paramValue) {
+    if (paramName) {
       dataObject[`${paramName}`] = paramType === "num" ? Number(paramValue) : paramValue;
       gaData.eventParam[`${paramName}`] = paramType === "num" ? Number(paramValue) : paramValue;
     }
   });
 
   // 사용자 속성 설정
-  const userProperties = document.querySelectorAll(".section.userProperty .parameterGroup");
+  const userProperties = document.querySelectorAll("#userProperty .parameterGroup");
   userProperties.forEach((group) => {
     const propName = group.querySelectorAll(".formInput")[0].value;
     const propValue = group.querySelectorAll(".formInput")[1].value;
     const propType = group.querySelector(".typeDropdown").value;
 
-    if (propName && propValue) {
+    if (propName) {
       dataObject[`${propName}`] = propType === "num" ? Number(propValue) : propValue;
       gaData.userProperty[`${propName}`] = propType === "num" ? Number(propValue) : propValue;
     }
   });
 
   // 데이터 표시 영역 업데이트
-  const viewDataDiv = document.querySelector(".content.viewData");
+  const viewDataDiv = document.querySelector("#viewData");
   viewDataDiv.innerHTML = `<pre>${JSON.stringify(dataObject, null, 2)}</pre>`;
 }
 
@@ -76,10 +77,9 @@ function bindRealTimeUpdate() {
 
 // 새로운 요소 추가 시 업데이트
 function addInput() {
-  const optionCnt = document.querySelectorAll("body > div.container > div.contentContainer > div.content.setData > div.section.preParam > div:nth-child(2) > select.dropdown > option").length;
-  const inputCnt = document.querySelectorAll("body > div.container > div.contentContainer > div.content.setData > div.section.preParam > div.inputGroup").length;
-  if (inputCnt < optionCnt) {
-    const addButton = document.querySelector(".section.preParam .addInput");
+  const inputCnt = document.querySelectorAll("#preParam > div.inputGroup").length;
+  if (inputCnt < 2) {
+    const addButton = document.querySelector("#preParam .addInput");
     addButton.insertAdjacentHTML(
       "beforebegin",
       `<div class="inputGroup">
@@ -104,7 +104,7 @@ function addInput() {
 function addMultipleInputs(type) {
   const addCountInput = type === "eventParam" ? document.getElementById("eventAddCount") : document.getElementById("userAddCount");
   const count = parseInt(addCountInput.value, 10);
-  const addButton = type === "eventParam" ? document.querySelector(".section.eventParam .addInput") : document.querySelector(".section.userProperty .addInput");
+  const addButton = type === "eventParam" ? document.querySelector("#eventParam .addInput") : document.querySelector("#userProperty .addInput");
 
   for (let i = 0; i < count; i++) {
     if (type === "eventParam") {
