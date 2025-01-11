@@ -74,7 +74,7 @@
                 </select>
                 <button class="removeButton" onclick="removeInput(this)">-</button>
               </div>
-              <button class="addInput" onclick="addInput()">매개변수 추가</button>
+              <button class="addInput" onclick="addInput('preParam')">매개변수 추가</button>
             </div>
             <hr />
             <div id="eventParam" class="section">
@@ -110,6 +110,7 @@
                 <input id="userAddCount" type="number" value="1" min="1" max="200" />
               </div>
             </div>
+
             <div id="fireButton">
               <button onclick="sendGAData()">이벤트 전송하기</button>
             </div>

@@ -1,5 +1,5 @@
-let eventParamCounter = 2; // 이벤트 매개변수 카운터 초기화
-let userPropertyCounter = 2; // 사용자 속성 카운터 초기화
+let eventParamCounter = 2;
+let userPropertyCounter = 2;
 let gaData = {
   eventParam: {},
   userProperty: {},
@@ -25,7 +25,12 @@ function updateDataObject() {
   const preParams = document.querySelectorAll("#preParam .inputGroup");
   preParams.forEach((group) => {
     const dropdown = group.querySelector(".dropdown").value;
-    const input = group.querySelector(".formInput").value;
+    let input;
+    if (group.querySelector(".formInput")) {
+      input = group.querySelector(".formInput").value;
+    } else {
+      input = document.querySelector("select.ecommerceSelect").value;
+    }
     const paramType = group.querySelector(".typeDropdown").value;
     if (dropdown) {
       dataObject[dropdown] = paramType === "num" ? Number(input) : input;
@@ -59,11 +64,34 @@ function updateDataObject() {
     }
   });
 
+  const transactions = document.querySelectorAll("#transaction .inputGroup");
+  if (transactions) {
+    transactions.forEach((group) => {
+      const dropdown = group.querySelector(".dropdown").value;
+      let input = group.querySelector(".formInput").value;
+      const paramType = group.querySelector(".typeDropdown").value;
+      if (dropdown) {
+        dataObject[dropdown] = paramType === "num" ? Number(input) : input;
+        gaData.eventParam[dropdown] = paramType === "num" ? Number(input) : input;
+      }
+    });
+  }
+
   // 데이터 표시 영역 업데이트
   const viewDataDiv = document.querySelector("#viewData");
   viewDataDiv.innerHTML = `<pre>${JSON.stringify(dataObject, null, 2)}</pre>`;
 }
 
+// 실시간 업데이트 이벤트 바인딩
+function bindRealTimeUpdate() {
+  const inputs = document.querySelectorAll("input.formInput, select");
+  inputs.forEach((input) => {
+    input.addEventListener("input", updateDataObject);
+    input.addEventListener("change", updateDataObject);
+  });
+}
+
+// 초기화 함수
 function resetParametersToDefault() {
   eventParamCounter = 2;
   userPropertyCounter = 2;
@@ -74,21 +102,21 @@ function resetParametersToDefault() {
     items: [{}],
   };
 
-  // 1. 사전 정의된 매개변수 초기화
+  // 사전 정의된 매개변수 초기화
   const inputGroups = document.querySelectorAll("#preParam .inputGroup");
   inputGroups.forEach((group, index) => {
-    // 첫 번째 항목은 기본값으로 유지
-    if (index > 0) {
-      group.remove();
-    }
+    if (index > 0) group.remove();
   });
 
-  // 첫 번째 그룹의 값 초기화
   const firstGroup = document.querySelector("#preParam .inputGroup");
   if (firstGroup) {
     const inputElement = firstGroup.querySelector(".formValue");
+    const ecommerceSelect = firstGroup.querySelector(".ecommerceSelect");
+
     if (inputElement) {
       inputElement.value = "";
+    } else if (ecommerceSelect) {
+      ecommerceSelect.selectedIndex = 0;
     }
 
     const dropdown = firstGroup.querySelector(".dropdown");
@@ -102,62 +130,41 @@ function resetParametersToDefault() {
     }
   }
 
-  // 2. 이벤트 매개변수 초기화
+  // 이벤트 매개변수 초기화
   const eventGroups = document.querySelectorAll("#eventParam .parameterGroup");
   eventGroups.forEach((group, index) => {
-    // 첫 번째 항목은 기본값으로 유지
-    if (index > 0) {
-      group.remove();
-    }
+    if (index > 0) group.remove();
   });
 
-  // 첫 번째 이벤트 매개변수 초기화
   const firstEventGroup = document.querySelector("#eventParam .parameterGroup");
   if (firstEventGroup) {
     const keyInput = firstEventGroup.querySelector(".formKey");
-    if (keyInput) {
-      keyInput.value = "event_parameter1";
-    }
-
     const valueInput = firstEventGroup.querySelector(".formValue");
-    if (valueInput) {
-      valueInput.value = "";
-    }
-
     const typeDropdown = firstEventGroup.querySelector(".typeDropdown");
-    if (typeDropdown) {
-      typeDropdown.selectedIndex = 0;
-    }
+
+    if (keyInput) keyInput.value = "event_parameter1";
+    if (valueInput) valueInput.value = "";
+    if (typeDropdown) typeDropdown.selectedIndex = 0;
   }
 
-  // 3. 사용자 속성 초기화
+  // 사용자 속성 초기화
   const userGroups = document.querySelectorAll("#userProperty .parameterGroup");
   userGroups.forEach((group, index) => {
-    // 첫 번째 항목은 기본값으로 유지
-    if (index > 0) {
-      group.remove();
-    }
+    if (index > 0) group.remove();
   });
 
-  // 첫 번째 사용자 속성 초기화
   const firstUserGroup = document.querySelector("#userProperty .parameterGroup");
   if (firstUserGroup) {
     const keyInput = firstUserGroup.querySelector(".formKey");
-    if (keyInput) {
-      keyInput.value = "user_property1";
-    }
-
     const valueInput = firstUserGroup.querySelector(".formValue");
-    if (valueInput) {
-      valueInput.value = "";
-    }
-
     const typeDropdown = firstUserGroup.querySelector(".typeDropdown");
-    if (typeDropdown) {
-      typeDropdown.selectedIndex = 0;
-    }
+
+    if (keyInput) keyInput.value = "user_property1";
+    if (valueInput) valueInput.value = "";
+    if (typeDropdown) typeDropdown.selectedIndex = 0;
   }
 
+  removeTransactionSection();
   updateDataObject();
 }
 
@@ -174,7 +181,6 @@ function updatePredefinedOptions(selectedEvent) {
     const parentGroup = dropdown.closest(".inputGroup");
     const inputElement = parentGroup.querySelector(".formValue");
     const typeDropdown = parentGroup.querySelector(".typeDropdown");
-    const removeButton = parentGroup.querySelector(".removeButton");
 
     // 기존 전자상거래 select 요소가 있으면 제거
     const ecommerceSelect = parentGroup.querySelector(".ecommerceSelect");
@@ -184,10 +190,12 @@ function updatePredefinedOptions(selectedEvent) {
 
     // 페이지뷰 또는 이벤트일 경우
     if (selectedEvent === "페이지뷰" || selectedEvent === "이벤트") {
-      const eventNameOption = document.createElement("option");
-      eventNameOption.value = "event_name";
-      eventNameOption.text = "이벤트 이름";
-      dropdown.insertBefore(eventNameOption, dropdown.firstChild);
+      if (selectedEvent === "이벤트") {
+        const eventNameOption = document.createElement("option");
+        eventNameOption.value = "event_name";
+        eventNameOption.text = "이벤트 이름";
+        dropdown.insertBefore(eventNameOption, dropdown.firstChild);
+      }
 
       if (!inputElement) {
         const newInput = document.createElement("input");
@@ -201,6 +209,7 @@ function updatePredefinedOptions(selectedEvent) {
 
     // 전자상거래일 경우
     if (selectedEvent === "전자상거래") {
+      // 사전 정의된 매개변수
       const eventNameOption = document.createElement("option");
       eventNameOption.value = "event_name";
       eventNameOption.text = "이벤트 이름";
@@ -236,6 +245,52 @@ function updatePredefinedOptions(selectedEvent) {
   });
 }
 
+// 거래 데이터 섹션 추가
+function addTransactionSection() {
+  const userPropertySection = document.querySelector("#userProperty");
+
+  // 이미 거래 데이터 섹션이 있는 경우 중복 추가 방지
+  if (document.querySelector("#transaction")) return;
+
+  const hrTag = document.createElement("hr");
+
+  const transactionSection = document.createElement("div");
+  transactionSection.id = "transaction";
+  transactionSection.classList.add("section");
+  transactionSection.innerHTML = `
+    <div class="sessionTitle">거래 매개변수</div>
+    <div class="inputGroup">
+      <select class="dropdown">
+        <option value="currency">currency</option>
+        <option value="transaction_id">transaction_id</option>
+        <option value="value">value</option>
+        <option value="tax">tax</option>
+        <option value="shipping">shipping</option>
+        <option value="coupon">coupon</option>
+      </select>
+      <input class="formInput formValue" type="text" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num">Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <button class="addInput" onclick="addInput('transaction')">매개변수 추가</button>
+  `;
+
+  // 거래 데이터 섹션 추가
+  userPropertySection.after(transactionSection);
+  userPropertySection.after(hrTag);
+}
+
+// 거래 데이터 섹션 제거
+function removeTransactionSection() {
+  const transactionSection = document.querySelector("#transaction");
+  const hrTag = transactionSection?.previousElementSibling; // 연결된 <hr> 태그 제거
+  if (transactionSection) transactionSection.remove();
+  if (hrTag && hrTag.tagName === "HR") hrTag.remove();
+}
+
 // 이벤트 타입 설정 함수
 function setSelectedButton(event) {
   const buttons = document.querySelectorAll("#eventType .event");
@@ -243,44 +298,76 @@ function setSelectedButton(event) {
   const clickedButton = event.target;
   clickedButton.classList.add("select");
 
-  updatePredefinedOptions(clickedButton.innerText);
+  const selectedEvent = clickedButton.innerText;
+  updatePredefinedOptions(selectedEvent);
   resetParametersToDefault();
-}
 
-// 실시간 업데이트 이벤트 바인딩
-function bindRealTimeUpdate() {
-  const inputs = document.querySelectorAll("input.formInput, select");
-  inputs.forEach((input) => {
-    input.addEventListener("input", updateDataObject);
-    input.addEventListener("change", updateDataObject);
-  });
+  // 거래 데이터 섹션 추가/제거
+  if (selectedEvent === "전자상거래") {
+    addTransactionSection();
+  } else {
+    removeTransactionSection();
+  }
+
+  bindRealTimeUpdate();
+  updateDataObject();
 }
 
 // 새로운 요소 추가 시 업데이트
-function addInput() {
-  const inputCnt = document.querySelectorAll("#preParam > div.inputGroup").length;
-  const seletedEvent = document.querySelector(".select").textContent;
-  const limitCnt = seletedEvent === "페이지뷰" ? 2 : 3;
-  if (inputCnt < limitCnt) {
-    const addButton = document.querySelector("#preParam .addInput");
-    addButton.insertAdjacentHTML(
-      "beforebegin",
-      `<div class="inputGroup">
-        <select class="dropdown">
-          <option value="contents_group">콘텐츠 그룹</option>
-          <option value="user_id">사용자 ID</option>
-        </select>
-        <input class="formInput formValue" type="text" placeholder="값 입력"/>
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num">Num</option>
-        </select>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>`
-    );
-  } else {
-    alert("모든 매개변수가 추가되었습니다.");
+function addInput(type) {
+  if (type === "prePram") {
+    const inputCnt = document.querySelectorAll("#preParam > div.inputGroup").length;
+    const seletedEvent = document.querySelector(".select").textContent;
+    const limitCnt = seletedEvent === "페이지뷰" ? 2 : 3;
+    if (inputCnt < limitCnt) {
+      const addButton = document.querySelector("#preParam .addInput");
+      addButton.insertAdjacentHTML(
+        "beforebegin",
+        `<div class="inputGroup">
+          <select class="dropdown">
+            <option value="contents_group">콘텐츠 그룹</option>
+            <option value="user_id">사용자 ID</option>
+          </select>
+          <input class="formInput formValue" type="text" placeholder="값 입력"/>
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>`
+      );
+    } else {
+      alert("모든 매개변수가 추가되었습니다.");
+    }
+  } else if (type === "transaction") {
+    const inputCnt = document.querySelectorAll("#transaction > div.inputGroup").length;
+    const limitCnt = 6;
+    if (inputCnt < limitCnt) {
+      const addButton = document.querySelector("#transaction .addInput");
+      addButton.insertAdjacentHTML(
+        "beforebegin",
+        `<div class="inputGroup">
+          <select class="dropdown">
+            <option value="currency">currency</option>
+            <option value="transaction_id">transaction_id</option>
+            <option value="value">value</option>
+            <option value="tax">tax</option>
+            <option value="shipping">shipping</option>
+            <option value="coupon">coupon</option>
+          </select>
+          <input class="formInput formValue" type="text" placeholder="값 입력"/>
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>`
+      );
+    } else {
+      alert("모든 매개변수가 추가되었습니다.");
+    }
   }
+
   bindRealTimeUpdate();
 }
 
@@ -321,8 +408,8 @@ function addMultipleInputs(type) {
     }
   }
 
-  bindRealTimeUpdate(); // 새로 추가된 요소에 이벤트 바인딩
-  updateDataObject(); // 데이터 업데이트
+  bindRealTimeUpdate();
+  updateDataObject();
 }
 
 // 삭제 함수
