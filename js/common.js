@@ -245,6 +245,19 @@ function updatePredefinedOptions(selectedEvent) {
   });
 }
 
+function getFormattedDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  const formattedDate = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+  return formattedDate;
+}
+
 // 거래 데이터 섹션 추가
 function addTransactionSection() {
   const userPropertySection = document.querySelector("#userProperty");
@@ -262,13 +275,63 @@ function addTransactionSection() {
     <div class="inputGroup">
       <select class="dropdown">
         <option value="currency">currency</option>
+      </select>
+      <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num">Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <div class="inputGroup">
+      <select class="dropdown">
         <option value="transaction_id">transaction_id</option>
+      </select>
+      <input class="formInput formValue" type="text" value="${getFormattedDate()}" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num">Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <div class="inputGroup">
+      <select class="dropdown">
         <option value="value">value</option>
+      </select>
+      <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num" selected>Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <div class="inputGroup">
+      <select class="dropdown">
         <option value="tax">tax</option>
+      </select>
+      <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num" selected>Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <div class="inputGroup">
+      <select class="dropdown">
         <option value="shipping">shipping</option>
+      </select>
+      <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num" selected>Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <div class="inputGroup">
+      <select class="dropdown">
         <option value="coupon">coupon</option>
       </select>
-      <input class="formInput formValue" type="text" placeholder="값 입력" />
+      <input class="formInput formValue" type="text" value="2000원 할인 쿠폰" placeholder="값 입력" />
       <select class="typeDropdown">
         <option value="str">Str</option>
         <option value="num">Num</option>
@@ -315,18 +378,35 @@ function setSelectedButton(event) {
 
 // 새로운 요소 추가 시 업데이트
 function addInput(type) {
-  if (type === "prePram") {
+  if (type === "preParam") {
     const inputCnt = document.querySelectorAll("#preParam > div.inputGroup").length;
     const seletedEvent = document.querySelector(".select").textContent;
     const limitCnt = seletedEvent === "페이지뷰" ? 2 : 3;
     if (inputCnt < limitCnt) {
       const addButton = document.querySelector("#preParam .addInput");
+
+      // 이미 선택된 옵션 추적
+      const usedOptions = Array.from(document.querySelectorAll("#preParam .dropdown")).map((dropdown) => dropdown.value);
+
+      // 모든 옵션 목록
+      const allOptions = [
+        { value: "contents_group", text: "콘텐츠 그룹" },
+        { value: "user_id", text: "사용자 ID" },
+      ];
+
+      // 사용 가능한 옵션 계산
+      const availableOptions = allOptions.filter((option) => !usedOptions.includes(option.value));
+
+      if (availableOptions.length === 0) {
+        alert("추가할 수 있는 옵션이 없습니다.");
+        return;
+      }
+
       addButton.insertAdjacentHTML(
         "beforebegin",
         `<div class="inputGroup">
           <select class="dropdown">
-            <option value="contents_group">콘텐츠 그룹</option>
-            <option value="user_id">사용자 ID</option>
+            ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
           </select>
           <input class="formInput formValue" type="text" placeholder="값 입력"/>
           <select class="typeDropdown">
@@ -344,16 +424,33 @@ function addInput(type) {
     const limitCnt = 6;
     if (inputCnt < limitCnt) {
       const addButton = document.querySelector("#transaction .addInput");
+
+      // 이미 선택된 옵션 추적
+      const usedOptions = Array.from(document.querySelectorAll("#transaction .dropdown")).map((dropdown) => dropdown.value);
+
+      // 모든 옵션 목록
+      const allOptions = [
+        { value: "currency", text: "currency" },
+        { value: "transaction_id", text: "transaction_id" },
+        { value: "value", text: "value" },
+        { value: "tax", text: "tax" },
+        { value: "shipping", text: "shipping" },
+        { value: "coupon", text: "coupon" },
+      ];
+
+      // 사용 가능한 옵션 계산
+      const availableOptions = allOptions.filter((option) => !usedOptions.includes(option.value));
+
+      if (availableOptions.length === 0) {
+        alert("추가할 수 있는 옵션이 없습니다.");
+        return;
+      }
+
       addButton.insertAdjacentHTML(
         "beforebegin",
         `<div class="inputGroup">
           <select class="dropdown">
-            <option value="currency">currency</option>
-            <option value="transaction_id">transaction_id</option>
-            <option value="value">value</option>
-            <option value="tax">tax</option>
-            <option value="shipping">shipping</option>
-            <option value="coupon">coupon</option>
+            ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
           </select>
           <input class="formInput formValue" type="text" placeholder="값 입력"/>
           <select class="typeDropdown">
@@ -425,7 +522,9 @@ function removeInput(button) {
 function setInitValue() {
   const formValues = document.querySelectorAll(".formValue");
   formValues.forEach((formValue) => {
-    formValue.value = "신기범짱";
+    if (!formValue.value) {
+      formValue.value = "신기범짱";
+    }
   });
   updateDataObject();
 }
