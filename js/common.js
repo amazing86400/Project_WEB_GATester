@@ -1,10 +1,13 @@
 let eventParamCounter = 2;
+let itemParamCounter = 1;
 let userPropertyCounter = 2;
+let productCounter = 1;
 let gaData = {
   eventParam: {},
   userProperty: {},
   items: [{}],
 };
+let productData = { 1: {} };
 
 // 데이터 업데이트 함수
 function updateDataObject() {
@@ -77,6 +80,21 @@ function updateDataObject() {
     });
   }
 
+  const items = document.querySelectorAll("#items .inputGroup");
+  if (items) {
+    let item = {};
+    items.forEach((group) => {
+      const dropdown = group.querySelector(".dropdown").value;
+      let input = group.querySelector(".formInput").value;
+      const paramType = group.querySelector(".typeDropdown").value;
+      if (dropdown) {
+        item[dropdown] = paramType === "num" ? Number(input) : input;
+        dataObject["items"] = [item];
+        gaData.items = [item];
+      }
+    });
+  }
+
   // 데이터 표시 영역 업데이트
   const viewDataDiv = document.querySelector("#viewData");
   viewDataDiv.innerHTML = `<pre>${JSON.stringify(dataObject, null, 2)}</pre>`;
@@ -95,6 +113,8 @@ function bindRealTimeUpdate() {
 function resetParametersToDefault() {
   eventParamCounter = 2;
   userPropertyCounter = 2;
+  itemParamCounter = 1;
+  productCounter = 1;
 
   gaData = {
     eventParam: {},
@@ -164,7 +184,6 @@ function resetParametersToDefault() {
     if (typeDropdown) typeDropdown.selectedIndex = 0;
   }
 
-  removeTransactionSection();
   updateDataObject();
 }
 
@@ -265,93 +284,451 @@ function addTransactionSection() {
   // 이미 거래 데이터 섹션이 있는 경우 중복 추가 방지
   if (document.querySelector("#transaction")) return;
 
-  const hrTag = document.createElement("hr");
-
-  const transactionSection = document.createElement("div");
-  transactionSection.id = "transaction";
-  transactionSection.classList.add("section");
+  const transactionSection = document.createElement("hr");
   transactionSection.innerHTML = `
-    <div class="sessionTitle">거래 매개변수</div>
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="currency">currency</option>
-      </select>
-      <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num">Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
+    <div id="transaction" class="section">
+      <div class="sessionTitle">거래 매개변수</div>
+      <div class="inputGroup">
+        <select class="dropdown">
+          <option value="currency">currency</option>
+        </select>
+        <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
+        <select class="typeDropdown">
+          <option value="str">Str</option>
+          <option value="num">Num</option>
+        </select>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>
+      <div class="inputGroup">
+        <select class="dropdown">
+          <option value="transaction_id">transaction_id</option>
+        </select>
+        <input class="formInput formValue" type="text" value="${getFormattedDate()}" placeholder="값 입력" />
+        <select class="typeDropdown">
+          <option value="str">Str</option>
+          <option value="num">Num</option>
+        </select>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>
+      <div class="inputGroup">
+        <select class="dropdown">
+          <option value="value">value</option>
+        </select>
+        <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
+        <select class="typeDropdown">
+          <option value="str">Str</option>
+          <option value="num" selected>Num</option>
+        </select>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>
+      <div class="inputGroup">
+        <select class="dropdown">
+          <option value="tax">tax</option>
+        </select>
+        <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
+        <select class="typeDropdown">
+          <option value="str">Str</option>
+          <option value="num" selected>Num</option>
+        </select>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>
+      <div class="inputGroup">
+        <select class="dropdown">
+          <option value="shipping">shipping</option>
+        </select>
+        <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
+        <select class="typeDropdown">
+          <option value="str">Str</option>
+          <option value="num" selected>Num</option>
+        </select>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>
+      <div class="inputGroup">
+        <select class="dropdown">
+          <option value="coupon">coupon</option>
+        </select>
+        <input class="formInput formValue" type="text" value="2000원 할인 쿠폰" placeholder="값 입력" />
+        <select class="typeDropdown">
+          <option value="str">Str</option>
+          <option value="num">Num</option>
+        </select>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>
+      <button class="addInput" onclick="addInput('transaction')">매개변수 추가</button>
     </div>
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="transaction_id">transaction_id</option>
-      </select>
-      <input class="formInput formValue" type="text" value="${getFormattedDate()}" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num">Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
-    </div>
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="value">value</option>
-      </select>
-      <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num" selected>Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
-    </div>
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="tax">tax</option>
-      </select>
-      <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num" selected>Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
-    </div>
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="shipping">shipping</option>
-      </select>
-      <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num" selected>Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
-    </div>
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="coupon">coupon</option>
-      </select>
-      <input class="formInput formValue" type="text" value="2000원 할인 쿠폰" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num">Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
-    </div>
-    <button class="addInput" onclick="addInput('transaction')">매개변수 추가</button>
   `;
 
-  // 거래 데이터 섹션 추가
   userPropertySection.after(transactionSection);
-  userPropertySection.after(hrTag);
 }
 
 // 거래 데이터 섹션 제거
 function removeTransactionSection() {
   const transactionSection = document.querySelector("#transaction");
-  const hrTag = transactionSection?.previousElementSibling; // 연결된 <hr> 태그 제거
-  if (transactionSection) transactionSection.remove();
-  if (hrTag && hrTag.tagName === "HR") hrTag.remove();
+  if (transactionSection) {
+    const hrTag = transactionSection.parentElement;
+    transactionSection.remove();
+    if (hrTag && hrTag.tagName === "HR") hrTag.remove();
+  }
+}
+
+// 상품 데이터 표시 업데이트
+function updateProductVisibility(visibleIndex) {
+  document.querySelectorAll(".productData").forEach((dataSection) => {
+    if (dataSection.id === `productData-${visibleIndex}`) {
+      dataSection.style.display = "block";
+    } else {
+      dataSection.style.display = "none";
+    }
+  });
+}
+
+// 상품 탭 클릭 시 데이터 렌더링
+function selectProductTab(productIndex) {
+  // 선택된 탭 강조 표시
+  document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
+  const selectedTab = document.querySelector(`.tab[data-product-index="${productIndex}"]`);
+  if (selectedTab) selectedTab.classList.add("active");
+
+  // 데이터 표시 업데이트
+  updateProductVisibility(productIndex);
+}
+
+// 상품 데이터 업데이트
+function updateProductData(productIndex) {
+  const productDataSection = document.querySelector(`#productData-${productIndex}`);
+  const inputGroups = productDataSection.querySelectorAll(".inputGroup");
+
+  const data = {};
+  inputGroups.forEach((group) => {
+    const key = group.querySelector(".dropdown").value;
+    const value = group.querySelector(".formValue").value;
+    const type = group.querySelector(".typeDropdown").value;
+    data[key] = type === "num" ? Number(value) : value;
+  });
+
+  productData[productIndex] = data;
+  updateDataObject();
+}
+
+// 상품 데이터 추가
+function addProductData(productIndex) {
+  const productDataContainer = document.querySelector("#productData");
+
+  const productData = document.createElement("div");
+  productData.id = `productData-${productIndex}`;
+  productData.classList.add("productData");
+  productData.innerHTML = `
+    <div class="inputGroup">
+      <select class="dropdown">
+        <option value="item_id">item_id</option>
+        <option value="item_name">item_name</option>
+        <option value="price">price</option>
+        <option value="quantity">quantity</option>
+      </select>
+      <input class="formInput formValue" type="text" placeholder="값 입력" />
+      <select class="typeDropdown">
+        <option value="str">Str</option>
+        <option value="num">Num</option>
+      </select>
+      <button class="removeButton" onclick="removeInput(this)">-</button>
+    </div>
+    <button class="addInput" onclick="addInput('items')">상품 매개변수 추가</button>
+  `;
+  productDataContainer.appendChild(productData);
+
+  // 다른 상품 데이터 숨기기
+  updateProductVisibility(productIndex);
+}
+
+// 상품 탭 추가
+function addProductTab() {
+  productCounter++;
+
+  // 상품 탭 추가
+  const tabContainer = document.querySelector("#productTabs");
+  const newTab = document.createElement("div");
+  newTab.classList.add("tab");
+  newTab.dataset.productIndex = productCounter;
+  newTab.innerHTML = `
+    <span>상품 ${productCounter}</span>
+    <button class="removeTab" onclick="removeProductTab(${productCounter})">-</button>
+  `;
+  tabContainer.insertBefore(newTab, document.querySelector("#addTab"));
+
+  // 새로운 상품 데이터 초기화
+  productData[productCounter] = {};
+
+  // 첫 번째 상품 데이터 복사 (기본 필드 설정)
+  addProductData(productCounter);
+
+  // 탭 클릭 이벤트 바인딩
+  newTab.addEventListener("click", () => selectProductTab(productCounter));
+}
+
+// 상품 탭 제거
+function removeProductTab(productIndex) {
+  // 상품 탭 삭제
+  const tab = document.querySelector(`.tab[data-product-index="${productIndex}"]`);
+  if (tab) tab.remove();
+
+  // 상품 데이터 삭제
+  delete productData[productIndex];
+
+  // 상품 데이터 화면에서 제거
+  const productDataSection = document.querySelector(`#productData-${productIndex}`);
+  if (productDataSection) productDataSection.remove();
+
+  // 다른 탭 선택 (첫 번째 탭으로 이동)
+  const firstTab = document.querySelector(".tab[data-product-index]");
+  if (firstTab) {
+    const firstIndex = firstTab.dataset.productIndex;
+    selectProductTab(firstIndex);
+  }
+}
+
+// 상품 데이터 섹션 추가
+function addItemSection() {
+  const transactionSection = document.querySelector("#transaction");
+
+  // 이미 상품 데이터 섹션이 있는 경우 중복 추가 방지
+  if (document.querySelector("#items")) return;
+
+  const itemsSection = document.createElement("hr");
+  itemsSection.innerHTML = `
+    <div id="items" class="section">
+      <div class="sessionTitle">상품 매개변수</div>
+      <div id="productTabs" class="tabs">
+        <div class="tab" data-product-index="1">
+          <span>상품 1</span>
+          <button class="removeTab" onclick="removeProductTab(1)">-</button>
+        </div>
+        <button id="addTab" onclick="addProductTab()">+</button>
+      </div>
+      <div id="productData">
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_id">item_id</option>
+          </select>
+          <input class="formInput formValue" type="text" value="G-1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_name">item_name</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="index">index</option>
+          </select>
+          <input class="formInput formValue" type="text" value="1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num" selected>Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_brand">item_brand</option>
+          </select>
+          <input class="formInput formValue" type="text" value="골든플래닛" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_category">item_category</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 카테고리1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_category2">item_category2</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 카테고리2" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_category3">item_category3</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 카테고리3" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_category4">item_category4</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 카테고리4" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_category5">item_category5</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 카테고리5" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="price">price</option>
+          </select>
+          <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num" selected>Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="quantity">quantity</option>
+          </select>
+          <input class="formInput formValue" type="text" value="1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num" selected>Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_variant">item_variant</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 옵션" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="coupon">coupon</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 쿠폰" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="discount">discount</option>
+          </select>
+          <input class="formInput formValue" type="text" value="2000" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num" selected>Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_list_id">item_list_id</option>
+          </select>
+          <input class="formInput formValue" type="text" value="L-1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="item_list_name">item_list_name</option>
+          </select>
+          <input class="formInput formValue" type="text" value="상품 목록1" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="affiliation">affiliation</option>
+          </select>
+          <input class="formInput formValue" type="text" value="거래처" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="location_id">location_id</option>
+          </select>
+          <input class="formInput formValue" type="text" value="ChIJIQBpAG2ahYAR_6128GcTUEo" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>
+      </div>
+      <button class="addInput" onclick="addInput('items')">상품 매개변수 추가</button>
+      <button class="addInput" onclick="addMultipleInputs('itemParam')">항목 매개변수 추가</button>
+      <input id="itemAddCount" type="number" value="1" min="1" max="200" />
+    </div>
+  `;
+
+  transactionSection.after(itemsSection);
+}
+
+// 상품 데이터 섹션 제거
+function removeItemSection() {
+  const itemSection = document.querySelector("#items");
+  if (itemSection) {
+    const hrTag = itemSection.parentElement;
+    itemSection.remove();
+    if (hrTag && hrTag.tagName === "HR") hrTag.remove();
+  }
+
+  // 상품 데이터 초기화
+  const productTabs = document.querySelectorAll(".tab");
+  productTabs.forEach((tab, index) => {
+    if (index > 0) tab.remove(); // 기본 상품 탭 제외
+  });
+  const productDataContainer = document.querySelector("#productData");
+  productDataContainer.innerHTML = ""; // 상품 데이터 초기화
 }
 
 // 이벤트 타입 설정 함수
@@ -368,8 +745,10 @@ function setSelectedButton(event) {
   // 거래 데이터 섹션 추가/제거
   if (selectedEvent === "전자상거래") {
     addTransactionSection();
+    addItemSection();
   } else {
     removeTransactionSection();
+    removeItemSection();
   }
 
   bindRealTimeUpdate();
@@ -463,15 +842,82 @@ function addInput(type) {
     } else {
       alert("모든 매개변수가 추가되었습니다.");
     }
+  } else if (type === "items") {
+    const inputCnt = document.querySelectorAll("#items > div.inputGroup").length;
+    const limitCnt = 18;
+    if (inputCnt < limitCnt) {
+      const addButton = document.querySelector("#items .addInput");
+
+      // 이미 선택된 옵션 추적
+      const usedOptions = Array.from(document.querySelectorAll("#items .dropdown")).map((dropdown) => dropdown.value);
+
+      // 모든 옵션 목록
+      const allOptions = [
+        { value: "item_id", text: "item_id" },
+        { value: "item_name", text: "item_name" },
+        { value: "index", text: "index" },
+        { value: "item_brand", text: "item_brand" },
+        { value: "item_category", text: "item_category" },
+        { value: "item_category2", text: "item_category2" },
+        { value: "item_category3", text: "item_category3" },
+        { value: "item_category4", text: "item_category4" },
+        { value: "item_category5", text: "item_category5" },
+        { value: "price", text: "price" },
+        { value: "quantity", text: "quantity" },
+        { value: "item_variant", text: "item_variant" },
+        { value: "coupon", text: "coupon" },
+        { value: "discount", text: "discount" },
+        { value: "item_list_id", text: "item_list_id" },
+        { value: "item_list_name", text: "item_list_name" },
+        { value: "affiliation", text: "affiliation" },
+        { value: "location_id", text: "location_id" },
+      ];
+
+      // 사용 가능한 옵션 계산
+      const availableOptions = allOptions.filter((option) => !usedOptions.includes(option.value));
+
+      if (availableOptions.length === 0) {
+        alert("추가할 수 있는 옵션이 없습니다.");
+        return;
+      }
+
+      addButton.insertAdjacentHTML(
+        "beforebegin",
+        `<div class="inputGroup">
+          <select class="dropdown">
+            ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
+          </select>
+          <input class="formInput formValue" type="text" placeholder="값 입력"/>
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>`
+      );
+    } else {
+      alert("모든 매개변수가 추가되었습니다.");
+    }
   }
 
   bindRealTimeUpdate();
+  updateDataObject();
 }
 
 function addMultipleInputs(type) {
-  const addCountInput = type === "eventParam" ? document.getElementById("eventAddCount") : document.getElementById("userAddCount");
+  let addCountInput;
+  let addButton;
+  if (type === "eventParam") {
+    addButton = document.querySelector("#eventParam .addInput");
+    addCountInput = document.getElementById("eventAddCount");
+  } else if (type === "userProperty") {
+    addButton = document.querySelector("#userProperty .addInput");
+    addCountInput = document.getElementById("userAddCount");
+  } else if (type === "itemParam") {
+    addButton = document.querySelector("#items .addInput");
+    addCountInput = document.getElementById("itemAddCount");
+  }
   const count = parseInt(addCountInput.value, 10);
-  const addButton = type === "eventParam" ? document.querySelector("#eventParam .addInput") : document.querySelector("#userProperty .addInput");
 
   for (let i = 0; i < count; i++) {
     if (type === "eventParam") {
@@ -502,6 +948,20 @@ function addMultipleInputs(type) {
         </div>`
       );
       userPropertyCounter++;
+    } else if (type === "itemParam") {
+      addButton.insertAdjacentHTML(
+        "beforebegin",
+        `<div class="parameterGroup">
+          <input class="formInput formKey" type="text" value="item_parameter${itemParamCounter}" />
+          <input class="formInput formValue" type="text" placeholder="값 입력" />
+          <select class="typeDropdown">
+            <option value="str">Str</option>
+            <option value="num">Num</option>
+          </select>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
+        </div>`
+      );
+      itemParamCounter++;
     }
   }
 
@@ -518,12 +978,45 @@ function removeInput(button) {
   }
 }
 
+// 매핑 함수
+function keyMapping(key) {
+  const keyMap = {
+    event_name: "click_event",
+    currency: "KRW",
+    transaction_id: getFormattedDate(),
+    value: 10000,
+    tax: 1000,
+    shipping: 1000,
+    coupon: "2000원 할인 쿠폰",
+    item_id: "G-1",
+    item_name: "상품1",
+    index: "1",
+    item_brand: "골든플래닛",
+    item_category: "상품 카테고리1",
+    item_category2: "상품 카테고리2",
+    item_category3: "상품 카테고리3",
+    item_category4: "상품 카테고리4",
+    item_category5: "상품 카테고리5",
+    price: 10000,
+    quantity: 1,
+    item_variant: "상품 옵션",
+    coupon: "상품 쿠폰",
+    discount: 2000,
+    item_list_id: "L-1",
+    item_list_name: "상품 목록1",
+    affiliation: "거래처",
+    location_id: "ChIJIQBpAG2ahYAR_6128GcTUEo",
+  };
+
+  return keyMap[key] || "테스트 입니다";
+}
+
 // 초기값 설정 함수
 function setInitValue() {
-  const formValues = document.querySelectorAll(".formValue");
-  formValues.forEach((formValue) => {
+  document.querySelectorAll(".formValue").forEach((formValue) => {
+    const key = formValue.parentElement.querySelector(".dropdown")?.value;
     if (!formValue.value) {
-      formValue.value = "신기범짱";
+      formValue.value = keyMapping(key);
     }
   });
   updateDataObject();

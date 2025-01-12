@@ -7,6 +7,7 @@ function gtag() {
 gtag("js", new Date());
 gtag("config", "G-VVYW8HV971", {
   page_title: "GATester",
+  debug_mode: true,
 });
 
 // 데이터 전송 함수
@@ -15,6 +16,7 @@ function sendGAData() {
   try {
     const eventParam = gaData.eventParam;
     const userProperty = gaData.userProperty;
+    const items = gaData.items;
     let eventName;
 
     if (document.querySelector(".event.select").textContent === "페이지뷰") {
@@ -26,6 +28,10 @@ function sendGAData() {
 
     if (userProperty) {
       gtag("set", "user_properties", userProperty);
+    }
+
+    if (items) {
+      eventParam["items"] = items;
     }
 
     gtag("event", eventName, eventParam);

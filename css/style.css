@@ -179,7 +179,9 @@ pre {
 
 #preParam,
 #eventParam,
-#userProperty {
+#userProperty,
+#transaction,
+#items {
   margin-top: 20px;
 }
 
@@ -254,4 +256,57 @@ hr {
 #fireButton {
   text-align: center;
   margin: 15px;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #a6cbff;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tab.active {
+  background-color: #1a73e8;
+  font-weight: bold;
+  border: 2px solid #0a58ca;
+}
+
+.tab span {
+  margin-right: 5px;
+}
+
+.tab .removeTab {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tab .removeTab:hover {
+  color: #ff0000;
+}
+
+#addTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#addTab:hover {
+  background-color: #45a049;
 }
