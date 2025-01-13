@@ -5,9 +5,9 @@ let productCounter = 1;
 let gaData = {
   eventParam: {},
   userProperty: {},
-  items: [{}],
+  items: [],
 };
-let productData = { 1: {} };
+let products = {};
 
 // 데이터 업데이트 함수
 function updateDataObject() {
@@ -68,7 +68,7 @@ function updateDataObject() {
   });
 
   const transactions = document.querySelectorAll("#transaction .inputGroup");
-  if (transactions) {
+  if (transactions.length > 0) {
     transactions.forEach((group) => {
       const dropdown = group.querySelector(".dropdown").value;
       let input = group.querySelector(".formInput").value;
@@ -81,18 +81,31 @@ function updateDataObject() {
   }
 
   const items = document.querySelectorAll("#items .inputGroup");
-  if (items) {
-    let item = {};
+  if (items.length > 0) {
+    const productIndex = document.querySelector("#productTabs > div.select").dataset["productIndex"];
+    products["id" + productIndex] = {};
+
     items.forEach((group) => {
-      const dropdown = group.querySelector(".dropdown").value;
-      let input = group.querySelector(".formInput").value;
+      let key;
+      if (group.querySelector(".dropdown")) {
+        key = group.querySelector(".dropdown").value;
+      } else {
+        key = group.querySelector(".formInput.formKey").value;
+      }
+      let value = group.querySelector(".formInput.formValue").value;
       const paramType = group.querySelector(".typeDropdown").value;
-      if (dropdown) {
-        item[dropdown] = paramType === "num" ? Number(input) : input;
-        dataObject["items"] = [item];
-        gaData.items = [item];
+      if (key) {
+        products["id" + productIndex][key] = paramType === "num" ? Number(value) : value;
       }
     });
+
+    dataObject["items"] = [];
+    gaData.items = [];
+
+    for (var idx in products) {
+      dataObject["items"].push(products[idx]);
+      gaData.items.push(products[idx]);
+    }
   }
 
   // 데이터 표시 영역 업데이트
@@ -119,8 +132,10 @@ function resetParametersToDefault() {
   gaData = {
     eventParam: {},
     userProperty: {},
-    items: [{}],
+    items: [],
   };
+
+  products = {};
 
   // 사전 정의된 매개변수 초기화
   const inputGroups = document.querySelectorAll("#preParam .inputGroup");
@@ -183,8 +198,6 @@ function resetParametersToDefault() {
     if (valueInput) valueInput.value = "";
     if (typeDropdown) typeDropdown.selectedIndex = 0;
   }
-
-  updateDataObject();
 }
 
 // 사전 정의된 매개변수 옵션 업데이트
@@ -371,118 +384,63 @@ function removeTransactionSection() {
   }
 }
 
-// 상품 데이터 표시 업데이트
-function updateProductVisibility(visibleIndex) {
-  document.querySelectorAll(".productData").forEach((dataSection) => {
-    if (dataSection.id === `productData-${visibleIndex}`) {
-      dataSection.style.display = "block";
-    } else {
-      dataSection.style.display = "none";
-    }
-  });
+// 탭 선택 함수
+function selectedProductTab(event) {
+  const target = event.target;
+  if (target.tagName.toLowerCase() !== "button") {
+    const currentTab = target.closest("div.tab");
+
+    const preSelectedTabs = document.querySelectorAll("#productTabs .tab");
+    preSelectedTabs.forEach((tab) => tab.classList.remove("select"));
+
+    currentTab.classList.add("select");
+  }
 }
 
-// 상품 탭 클릭 시 데이터 렌더링
-function selectProductTab(productIndex) {
-  // 선택된 탭 강조 표시
-  document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
-  const selectedTab = document.querySelector(`.tab[data-product-index="${productIndex}"]`);
-  if (selectedTab) selectedTab.classList.add("active");
-
-  // 데이터 표시 업데이트
-  updateProductVisibility(productIndex);
-}
-
-// 상품 데이터 업데이트
-function updateProductData(productIndex) {
-  const productDataSection = document.querySelector(`#productData-${productIndex}`);
-  const inputGroups = productDataSection.querySelectorAll(".inputGroup");
-
-  const data = {};
-  inputGroups.forEach((group) => {
-    const key = group.querySelector(".dropdown").value;
-    const value = group.querySelector(".formValue").value;
-    const type = group.querySelector(".typeDropdown").value;
-    data[key] = type === "num" ? Number(value) : value;
-  });
-
-  productData[productIndex] = data;
-  updateDataObject();
-}
-
-// 상품 데이터 추가
-function addProductData(productIndex) {
-  const productDataContainer = document.querySelector("#productData");
-
-  const productData = document.createElement("div");
-  productData.id = `productData-${productIndex}`;
-  productData.classList.add("productData");
-  productData.innerHTML = `
-    <div class="inputGroup">
-      <select class="dropdown">
-        <option value="item_id">item_id</option>
-        <option value="item_name">item_name</option>
-        <option value="price">price</option>
-        <option value="quantity">quantity</option>
-      </select>
-      <input class="formInput formValue" type="text" placeholder="값 입력" />
-      <select class="typeDropdown">
-        <option value="str">Str</option>
-        <option value="num">Num</option>
-      </select>
-      <button class="removeButton" onclick="removeInput(this)">-</button>
-    </div>
-    <button class="addInput" onclick="addInput('items')">상품 매개변수 추가</button>
-  `;
-  productDataContainer.appendChild(productData);
-
-  // 다른 상품 데이터 숨기기
-  updateProductVisibility(productIndex);
-}
-
-// 상품 탭 추가
+// 상품 탭 추가 함수
 function addProductTab() {
   productCounter++;
 
   // 상품 탭 추가
+  const preSelectedTabs = document.querySelectorAll("#productTabs .tab");
+  preSelectedTabs.forEach((tab) => tab.classList.remove("select"));
+
   const tabContainer = document.querySelector("#productTabs");
   const newTab = document.createElement("div");
-  newTab.classList.add("tab");
+  newTab.classList.add("tab", "select");
   newTab.dataset.productIndex = productCounter;
+  newTab.onclick = function () {
+    selectedProductTab(event);
+  };
   newTab.innerHTML = `
     <span>상품 ${productCounter}</span>
-    <button class="removeTab" onclick="removeProductTab(${productCounter})">-</button>
+    <button class="removeTab" onclick="removeProductTab(event)">X</button>
   `;
   tabContainer.insertBefore(newTab, document.querySelector("#addTab"));
 
-  // 새로운 상품 데이터 초기화
-  productData[productCounter] = {};
-
-  // 첫 번째 상품 데이터 복사 (기본 필드 설정)
-  addProductData(productCounter);
-
-  // 탭 클릭 이벤트 바인딩
-  newTab.addEventListener("click", () => selectProductTab(productCounter));
+  updateDataObject();
 }
 
-// 상품 탭 제거
-function removeProductTab(productIndex) {
+// 상품 탭 삭제 함수
+function removeProductTab(event) {
+  const currentTab = event.target;
+
+  // 다른 탭 선택 (첫 번째 탭으로 이동)
+  const previousTab = currentTab.parentElement.previousElementSibling;
+  const nextTab = currentTab.parentElement.nextElementSibling;
+
   // 상품 탭 삭제
+  const productIndex = currentTab.parentElement.dataset.productIndex;
   const tab = document.querySelector(`.tab[data-product-index="${productIndex}"]`);
   if (tab) tab.remove();
 
-  // 상품 데이터 삭제
-  delete productData[productIndex];
-
-  // 상품 데이터 화면에서 제거
-  const productDataSection = document.querySelector(`#productData-${productIndex}`);
-  if (productDataSection) productDataSection.remove();
-
-  // 다른 탭 선택 (첫 번째 탭으로 이동)
-  const firstTab = document.querySelector(".tab[data-product-index]");
-  if (firstTab) {
-    const firstIndex = firstTab.dataset.productIndex;
-    selectProductTab(firstIndex);
+  const selectedTab = document.querySelector("#productTabs > div.tab.select");
+  if (!selectedTab) {
+    if (previousTab) {
+      previousTab.classList.add("select");
+    } else if (nextTab) {
+      nextTab.classList.add("select");
+    }
   }
 }
 
@@ -498,15 +456,15 @@ function addItemSection() {
     <div id="items" class="section">
       <div class="sessionTitle">상품 매개변수</div>
       <div id="productTabs" class="tabs">
-        <div class="tab" data-product-index="1">
+        <div class="tab select" data-product-index="1" onclick="selectedProductTab(event)">
           <span>상품 1</span>
-          <button class="removeTab" onclick="removeProductTab(1)">-</button>
+          <button class="removeTab" onclick="removeProductTab(event)">X</button>
         </div>
         <button id="addTab" onclick="addProductTab()">+</button>
       </div>
       <div id="productData">
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_id">item_id</option>
           </select>
           <input class="formInput formValue" type="text" value="G-1" placeholder="값 입력" />
@@ -517,7 +475,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_name">item_name</option>
           </select>
           <input class="formInput formValue" type="text" value="상품1" placeholder="값 입력" />
@@ -528,7 +486,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="index">index</option>
           </select>
           <input class="formInput formValue" type="text" value="1" placeholder="값 입력" />
@@ -539,7 +497,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_brand">item_brand</option>
           </select>
           <input class="formInput formValue" type="text" value="골든플래닛" placeholder="값 입력" />
@@ -550,7 +508,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_category">item_category</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리1" placeholder="값 입력" />
@@ -561,7 +519,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_category2">item_category2</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리2" placeholder="값 입력" />
@@ -572,7 +530,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_category3">item_category3</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리3" placeholder="값 입력" />
@@ -583,7 +541,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_category4">item_category4</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리4" placeholder="값 입력" />
@@ -594,7 +552,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_category5">item_category5</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리5" placeholder="값 입력" />
@@ -605,7 +563,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="price">price</option>
           </select>
           <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
@@ -616,7 +574,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="quantity">quantity</option>
           </select>
           <input class="formInput formValue" type="text" value="1" placeholder="값 입력" />
@@ -627,7 +585,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_variant">item_variant</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 옵션" placeholder="값 입력" />
@@ -638,7 +596,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="coupon">coupon</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 쿠폰" placeholder="값 입력" />
@@ -649,7 +607,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="discount">discount</option>
           </select>
           <input class="formInput formValue" type="text" value="2000" placeholder="값 입력" />
@@ -660,7 +618,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_list_id">item_list_id</option>
           </select>
           <input class="formInput formValue" type="text" value="L-1" placeholder="값 입력" />
@@ -671,7 +629,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="item_list_name">item_list_name</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 목록1" placeholder="값 입력" />
@@ -682,7 +640,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="affiliation">affiliation</option>
           </select>
           <input class="formInput formValue" type="text" value="거래처" placeholder="값 입력" />
@@ -693,7 +651,7 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             <option value="location_id">location_id</option>
           </select>
           <input class="formInput formValue" type="text" value="ChIJIQBpAG2ahYAR_6128GcTUEo" placeholder="값 입력" />
@@ -721,14 +679,6 @@ function removeItemSection() {
     itemSection.remove();
     if (hrTag && hrTag.tagName === "HR") hrTag.remove();
   }
-
-  // 상품 데이터 초기화
-  const productTabs = document.querySelectorAll(".tab");
-  productTabs.forEach((tab, index) => {
-    if (index > 0) tab.remove(); // 기본 상품 탭 제외
-  });
-  const productDataContainer = document.querySelector("#productData");
-  productDataContainer.innerHTML = ""; // 상품 데이터 초기화
 }
 
 // 이벤트 타입 설정 함수
@@ -740,9 +690,7 @@ function setSelectedButton(event) {
 
   const selectedEvent = clickedButton.innerText;
   updatePredefinedOptions(selectedEvent);
-  resetParametersToDefault();
 
-  // 거래 데이터 섹션 추가/제거
   if (selectedEvent === "전자상거래") {
     addTransactionSection();
     addItemSection();
@@ -751,6 +699,7 @@ function setSelectedButton(event) {
     removeItemSection();
   }
 
+  resetParametersToDefault();
   bindRealTimeUpdate();
   updateDataObject();
 }
@@ -846,7 +795,7 @@ function addInput(type) {
     const inputCnt = document.querySelectorAll("#items > div.inputGroup").length;
     const limitCnt = 18;
     if (inputCnt < limitCnt) {
-      const addButton = document.querySelector("#items .addInput");
+      const addButton = document.querySelector("#productData");
 
       // 이미 선택된 옵션 추적
       const usedOptions = Array.from(document.querySelectorAll("#items .dropdown")).map((dropdown) => dropdown.value);
@@ -882,9 +831,9 @@ function addInput(type) {
       }
 
       addButton.insertAdjacentHTML(
-        "beforebegin",
+        "beforeend",
         `<div class="inputGroup">
-          <select class="dropdown">
+          <select class="dropdown formKey">
             ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
           </select>
           <input class="formInput formValue" type="text" placeholder="값 입력"/>
@@ -914,7 +863,7 @@ function addMultipleInputs(type) {
     addButton = document.querySelector("#userProperty .addInput");
     addCountInput = document.getElementById("userAddCount");
   } else if (type === "itemParam") {
-    addButton = document.querySelector("#items .addInput");
+    addButton = document.querySelector("#productData");
     addCountInput = document.getElementById("itemAddCount");
   }
   const count = parseInt(addCountInput.value, 10);
@@ -950,8 +899,8 @@ function addMultipleInputs(type) {
       userPropertyCounter++;
     } else if (type === "itemParam") {
       addButton.insertAdjacentHTML(
-        "beforebegin",
-        `<div class="parameterGroup">
+        "beforeend",
+        `<div class="inputGroup">
           <input class="formInput formKey" type="text" value="item_parameter${itemParamCounter}" />
           <input class="formInput formValue" type="text" placeholder="값 입력" />
           <select class="typeDropdown">

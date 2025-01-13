@@ -147,7 +147,6 @@ a {
 #content {
   display: flex;
   align-items: center;
-  margin-top: 20px;
 }
 
 #initButton {
@@ -161,7 +160,7 @@ a {
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
-  max-height: 600px;
+  max-height: 750px;
   overflow-y: scroll;
   border: 1px solid #ccc;
 }
@@ -191,11 +190,10 @@ hr {
 }
 
 .dropdown {
+  display: inline;
   border: solid 1px #dadce0;
   border-radius: 4px;
   box-shadow: none;
-  /* padding-left: 12px;
-  padding-right: 12px; */
   padding: 0px 0px 0px 12px;
   height: 33px;
   line-height: 38px;
@@ -267,7 +265,8 @@ hr {
 .tab {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  font-size: small;
+  padding: 3px 5px;
   margin-right: 5px;
   background-color: #a6cbff;
   border-radius: 4px;
@@ -275,14 +274,19 @@ hr {
   cursor: pointer;
 }
 
-.tab.active {
+.tab:hover {
   background-color: #1a73e8;
+}
+
+.tab.select {
+  background-color: #1a73e8;
+  color: #fff;
   font-weight: bold;
   border: 2px solid #0a58ca;
 }
 
 .tab span {
-  margin-right: 5px;
+  margin-right: 3px;
 }
 
 .tab .removeTab {
@@ -293,20 +297,21 @@ hr {
 }
 
 .tab .removeTab:hover {
-  color: #ff0000;
+  color: #db1f1f;
 }
 
-#addTab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 10px;
-  background-color: #4caf50;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-}
+/* 반응형 */
+@media (max-width: 1400px) {
+  .contentContainer {
+    height: 97%;
+  }
 
-#addTab:hover {
-  background-color: #45a049;
+  #content {
+    margin-top: 10px;
+  }
+
+  #setData,
+  #viewData {
+    max-height: 600px;
+  }
 }
