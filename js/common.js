@@ -16,10 +16,10 @@ function updateDataObject() {
   // 페이지 제목 및 페이지 주소 설정
   const pageTitle = document.getElementById("pageTitle").value;
   const pageURL = document.getElementById("pageURL").value;
-  const titleType = document.querySelector(".titleType").value;
-  const locationType = document.querySelector(".locationType").value;
-  dataObject.page_title = titleType === "num" ? Number(pageTitle) : pageTitle;
-  dataObject.page_location = locationType === "num" ? Number(pageURL) : pageURL;
+  const titleType = document.querySelector(".titleType").checked;
+  const locationType = document.querySelector(".locationType").checked;
+  dataObject.page_title = titleType === true ? Number(pageTitle) : pageTitle;
+  dataObject.page_location = locationType === true ? Number(pageURL) : pageURL;
 
   gaData.eventParam.page_title = titleType === "num" ? Number(pageTitle) : pageTitle;
   gaData.eventParam.page_location = locationType === "num" ? Number(pageURL) : pageURL;
@@ -34,10 +34,10 @@ function updateDataObject() {
     } else {
       input = document.querySelector("select.ecommerceSelect").value;
     }
-    const paramType = group.querySelector(".typeDropdown").value;
+    const paramType = group.querySelector(".typeToggle").checked;
     if (dropdown) {
-      dataObject[dropdown] = paramType === "num" ? Number(input) : input;
-      gaData.eventParam[dropdown] = paramType === "num" ? Number(input) : input;
+      dataObject[dropdown] = paramType === true ? Number(input) : input;
+      gaData.eventParam[dropdown] = paramType === true ? Number(input) : input;
     }
   });
 
@@ -46,11 +46,11 @@ function updateDataObject() {
   eventParams.forEach((group) => {
     const paramName = group.querySelectorAll(".formInput")[0].value;
     const paramValue = group.querySelectorAll(".formInput")[1].value;
-    const paramType = group.querySelector(".typeDropdown").value;
+    const paramType = group.querySelector(".typeToggle").checked;
 
     if (paramName) {
-      dataObject[`${paramName}`] = paramType === "num" ? Number(paramValue) : paramValue;
-      gaData.eventParam[`${paramName}`] = paramType === "num" ? Number(paramValue) : paramValue;
+      dataObject[`${paramName}`] = paramType === true ? Number(paramValue) : paramValue;
+      gaData.eventParam[`${paramName}`] = paramType === true ? Number(paramValue) : paramValue;
     }
   });
 
@@ -59,11 +59,11 @@ function updateDataObject() {
   userProperties.forEach((group) => {
     const propName = group.querySelectorAll(".formInput")[0].value;
     const propValue = group.querySelectorAll(".formInput")[1].value;
-    const propType = group.querySelector(".typeDropdown").value;
+    const propType = group.querySelector(".typeToggle").checked;
 
     if (propName) {
-      dataObject[`${propName}`] = propType === "num" ? Number(propValue) : propValue;
-      gaData.userProperty[`${propName}`] = propType === "num" ? Number(propValue) : propValue;
+      dataObject[`${propName}`] = propType === true ? Number(propValue) : propValue;
+      gaData.userProperty[`${propName}`] = propType === true ? Number(propValue) : propValue;
     }
   });
 
@@ -72,10 +72,10 @@ function updateDataObject() {
     transactions.forEach((group) => {
       const dropdown = group.querySelector(".dropdown").value;
       let input = group.querySelector(".formInput").value;
-      const paramType = group.querySelector(".typeDropdown").value;
+      const paramType = group.querySelector(".typeToggle").checked;
       if (dropdown) {
-        dataObject[dropdown] = paramType === "num" ? Number(input) : input;
-        gaData.eventParam[dropdown] = paramType === "num" ? Number(input) : input;
+        dataObject[dropdown] = paramType === true ? Number(input) : input;
+        gaData.eventParam[dropdown] = paramType === true ? Number(input) : input;
       }
     });
   }
@@ -93,9 +93,9 @@ function updateDataObject() {
         key = group.querySelector(".formInput.formKey").value;
       }
       let value = group.querySelector(".formInput.formValue").value;
-      const paramType = group.querySelector(".typeDropdown").value;
+      const paramType = group.querySelector(".typeToggle").value;
       if (key) {
-        products["id" + productIndex][key] = paramType === "num" ? Number(value) : value;
+        products["id" + productIndex][key] = paramType === true ? Number(value) : value;
       }
     });
 
@@ -110,12 +110,40 @@ function updateDataObject() {
 
   // 데이터 표시 영역 업데이트
   const viewDataDiv = document.querySelector("#viewData");
-  viewDataDiv.innerHTML = `<pre>${JSON.stringify(dataObject, null, 2)}</pre>`;
+  viewDataDiv.innerHTML = `<pre>${syntaxHighlight(dataObject)}</pre>`;
+}
+
+function syntaxHighlight(json) {
+  json = JSON.stringify(json, null, 2);
+  return json.replace(
+    /("(.*?)")(?=:)|("(.*?)")|(\b\d+\.?\d*)|(\btrue\b|\bfalse\b)|(\bnull\b)|([\{\}\[\]])/g,
+    function (match, keyWithColon, key, stringValue, string, number, boolean, nullValue, bracket) {
+      if (keyWithColon) {
+        return `<span class="key">${keyWithColon}</span>`;
+      }
+      if (stringValue) {
+        return `<span class="string">${stringValue}</span>`;
+      }
+      if (number) {
+        return `<span class="number">${number}</span>`;
+      }
+      if (boolean) {
+        return `<span class="boolean">${boolean}</span>`;
+      }
+      if (nullValue) {
+        return `<span class="null">${nullValue}</span>`;
+      }
+      if (bracket) {
+        return `<span class="bracket">${bracket}</span>`;
+      }
+      return match;
+    }
+  );
 }
 
 // 실시간 업데이트 이벤트 바인딩
 function bindRealTimeUpdate() {
-  const inputs = document.querySelectorAll("input.formInput, select");
+  const inputs = document.querySelectorAll("input.formInput, select, input.checkbox");
   inputs.forEach((input) => {
     input.addEventListener("input", updateDataObject);
     input.addEventListener("change", updateDataObject);
@@ -192,7 +220,7 @@ function resetParametersToDefault() {
   if (firstUserGroup) {
     const keyInput = firstUserGroup.querySelector(".formKey");
     const valueInput = firstUserGroup.querySelector(".formValue");
-    const typeDropdown = firstUserGroup.querySelector(".typeDropdown");
+    const typeDropdown = firstUserGroup.querySelector(".typeToggle");
 
     if (keyInput) keyInput.value = "user_property1";
     if (valueInput) valueInput.value = "";
@@ -212,7 +240,7 @@ function updatePredefinedOptions(selectedEvent) {
 
     const parentGroup = dropdown.closest(".inputGroup");
     const inputElement = parentGroup.querySelector(".formValue");
-    const typeDropdown = parentGroup.querySelector(".typeDropdown");
+    const typeDropdown = parentGroup.querySelector(".typeToggle");
 
     // 기존 전자상거래 select 요소가 있으면 제거
     const ecommerceSelect = parentGroup.querySelector(".ecommerceSelect");
@@ -306,10 +334,13 @@ function addTransactionSection() {
           <option value="currency">currency</option>
         </select>
         <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num">Num</option>
-        </select>
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" />
+          <div class="knob">
+            <span>Str</span>
+          </div>
+          <div class="btn-bg"></div>
+        </div>
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <div class="inputGroup">
@@ -317,10 +348,13 @@ function addTransactionSection() {
           <option value="transaction_id">transaction_id</option>
         </select>
         <input class="formInput formValue" type="text" value="${getFormattedDate()}" placeholder="값 입력" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num">Num</option>
-        </select>
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" />
+          <div class="knob">
+            <span>Str</span>
+          </div>
+          <div class="btn-bg"></div>
+        </div>
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <div class="inputGroup">
@@ -328,10 +362,13 @@ function addTransactionSection() {
           <option value="value">value</option>
         </select>
         <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num" selected>Num</option>
-        </select>
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" />
+          <div class="knob">
+            <span>Str</span>
+          </div>
+          <div class="btn-bg"></div>
+        </div>
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <div class="inputGroup">
@@ -339,10 +376,13 @@ function addTransactionSection() {
           <option value="tax">tax</option>
         </select>
         <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num" selected>Num</option>
-        </select>
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" />
+          <div class="knob">
+            <span>Str</span>
+          </div>
+          <div class="btn-bg"></div>
+        </div>
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <div class="inputGroup">
@@ -350,10 +390,13 @@ function addTransactionSection() {
           <option value="shipping">shipping</option>
         </select>
         <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num" selected>Num</option>
-        </select>
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" />
+          <div class="knob">
+            <span>Str</span>
+          </div>
+          <div class="btn-bg"></div>
+        </div>
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <div class="inputGroup">
@@ -361,10 +404,13 @@ function addTransactionSection() {
           <option value="coupon">coupon</option>
         </select>
         <input class="formInput formValue" type="text" value="2000원 할인 쿠폰" placeholder="값 입력" />
-        <select class="typeDropdown">
-          <option value="str">Str</option>
-          <option value="num">Num</option>
-        </select>
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" />
+          <div class="knob">
+            <span>Str</span>
+          </div>
+          <div class="btn-bg"></div>
+        </div>
         <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <button class="addInput" onclick="addInput('transaction')">매개변수 추가</button>
@@ -468,10 +514,13 @@ function addItemSection() {
             <option value="item_id">item_id</option>
           </select>
           <input class="formInput formValue" type="text" value="G-1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -479,10 +528,13 @@ function addItemSection() {
             <option value="item_name">item_name</option>
           </select>
           <input class="formInput formValue" type="text" value="상품1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -490,10 +542,13 @@ function addItemSection() {
             <option value="index">index</option>
           </select>
           <input class="formInput formValue" type="text" value="1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num" selected>Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -501,10 +556,13 @@ function addItemSection() {
             <option value="item_brand">item_brand</option>
           </select>
           <input class="formInput formValue" type="text" value="골든플래닛" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -512,10 +570,13 @@ function addItemSection() {
             <option value="item_category">item_category</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -523,10 +584,13 @@ function addItemSection() {
             <option value="item_category2">item_category2</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리2" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -534,10 +598,13 @@ function addItemSection() {
             <option value="item_category3">item_category3</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리3" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -545,10 +612,13 @@ function addItemSection() {
             <option value="item_category4">item_category4</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리4" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -556,10 +626,13 @@ function addItemSection() {
             <option value="item_category5">item_category5</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 카테고리5" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -567,10 +640,13 @@ function addItemSection() {
             <option value="price">price</option>
           </select>
           <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num" selected>Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -578,10 +654,13 @@ function addItemSection() {
             <option value="quantity">quantity</option>
           </select>
           <input class="formInput formValue" type="text" value="1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num" selected>Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -589,10 +668,13 @@ function addItemSection() {
             <option value="item_variant">item_variant</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 옵션" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -600,10 +682,13 @@ function addItemSection() {
             <option value="coupon">coupon</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 쿠폰" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -611,10 +696,13 @@ function addItemSection() {
             <option value="discount">discount</option>
           </select>
           <input class="formInput formValue" type="text" value="2000" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num" selected>Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -622,10 +710,13 @@ function addItemSection() {
             <option value="item_list_id">item_list_id</option>
           </select>
           <input class="formInput formValue" type="text" value="L-1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -633,10 +724,13 @@ function addItemSection() {
             <option value="item_list_name">item_list_name</option>
           </select>
           <input class="formInput formValue" type="text" value="상품 목록1" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -644,10 +738,13 @@ function addItemSection() {
             <option value="affiliation">affiliation</option>
           </select>
           <input class="formInput formValue" type="text" value="거래처" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
         <div class="inputGroup">
@@ -655,10 +752,13 @@ function addItemSection() {
             <option value="location_id">location_id</option>
           </select>
           <input class="formInput formValue" type="text" value="ChIJIQBpAG2ahYAR_6128GcTUEo" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
       </div>
@@ -737,10 +837,13 @@ function addInput(type) {
             ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
           </select>
           <input class="formInput formValue" type="text" placeholder="값 입력"/>
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );
@@ -781,10 +884,13 @@ function addInput(type) {
             ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
           </select>
           <input class="formInput formValue" type="text" placeholder="값 입력"/>
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );
@@ -837,10 +943,13 @@ function addInput(type) {
             ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
           </select>
           <input class="formInput formValue" type="text" placeholder="값 입력"/>
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );
@@ -875,10 +984,13 @@ function addMultipleInputs(type) {
         `<div class="parameterGroup">
           <input class="formInput formKey" type="text" value="event_parameter${eventParamCounter}" />
           <input class="formInput formValue" type="text" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );
@@ -889,10 +1001,13 @@ function addMultipleInputs(type) {
         `<div class="parameterGroup">
           <input class="formInput formKey" type="text" value="user_property${userPropertyCounter}" />
           <input class="formInput formValue" type="text" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );
@@ -903,10 +1018,13 @@ function addMultipleInputs(type) {
         `<div class="inputGroup">
           <input class="formInput formKey" type="text" value="item_parameter${itemParamCounter}" />
           <input class="formInput formValue" type="text" placeholder="값 입력" />
-          <select class="typeDropdown">
-            <option value="str">Str</option>
-            <option value="num">Num</option>
-          </select>
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
+          </div>
           <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>`
       );

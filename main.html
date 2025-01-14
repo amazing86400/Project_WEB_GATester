@@ -8,7 +8,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVYW8HV971"></script>
     <script src="./js/analytics.js"></script>
     <script src="./js/common.js"></script>
-    <title>GATester</title>
+    <title>GA Tester</title>
   </head>
   <body>
     <div class="header">
@@ -31,93 +31,111 @@
 
       <!-- 콘텐츠 영역 -->
       <div class="contentContainer">
-        <div id="eventType">
-          <button class="event select">페이지뷰</button>
-          <button class="event">이벤트</button>
-          <button class="event">전자상거래</button>
-        </div>
-
-        <div id="content">
-          <div id="setData">
-            <button id="initButton" onclick="setInitValue()">초기값</button>
-            <div class="section">
-              <div class="sessionTitle">페이지 설정</div>
-              <div class="inputGroup">
-                <label for="pageTitle">페이지 제목:</label>
-                <input id="pageTitle" class="formInput" type="text" value="GATester" />
-                <select class="typeDropdown titleType">
-                  <option value="str">Str</option>
-                  <option value="num">Num</option>
-                </select>
-              </div>
-              <div class="inputGroup">
-                <label for="pageURL">페이지 주소:</label>
-                <input id="pageURL" class="formInput" type="text" value="https://www.gatester.com/" />
-                <select class="typeDropdown locationType">
-                  <option value="str">Str</option>
-                  <option value="num">Num</option>
-                </select>
-              </div>
-            </div>
-            <hr />
-            <div id="preParam" class="section">
-              <div class="sessionTitle">사전 정의된 매개변수</div>
-              <div class="inputGroup">
-                <select class="dropdown">
-                  <option value="contents_group">콘텐츠 그룹</option>
-                  <option value="user_id">사용자 ID</option>
-                </select>
-                <input class="formInput formValue" type="text" placeholder="값 입력" />
-                <select class="typeDropdown">
-                  <option value="str">Str</option>
-                  <option value="num">Num</option>
-                </select>
-                <button class="removeButton" onclick="removeInput(this)">-</button>
-              </div>
-              <button class="addInput" onclick="addInput('preParam')">매개변수 추가</button>
-            </div>
-            <hr />
-            <div id="eventParam" class="section">
-              <div class="sessionTitle">이벤트 매개변수</div>
-              <div class="parameterGroup">
-                <input class="formInput formKey" type="text" value="event_parameter1" />
-                <input class="formInput formValue" type="text" placeholder="값 입력" />
-                <select class="typeDropdown">
-                  <option value="str">Str</option>
-                  <option value="num">Num</option>
-                </select>
-                <button class="removeButton" onclick="removeInput(this)">-</button>
-              </div>
-              <div class="controls">
-                <button class="addInput" onclick="addMultipleInputs('eventParam')">매개변수 추가</button>
-                <input id="eventAddCount" type="number" value="1" min="1" max="200" />
-              </div>
-            </div>
-            <hr />
-            <div id="userProperty" class="section">
-              <div class="sessionTitle">사용자 속성</div>
-              <div class="parameterGroup">
-                <input class="formInput formKey" type="text" value="user_property1" />
-                <input class="formInput formValue" type="text" placeholder="값 입력" />
-                <select class="typeDropdown">
-                  <option value="str">Str</option>
-                  <option value="num">Num</option>
-                </select>
-                <button class="removeButton" onclick="removeInput(this)">-</button>
-              </div>
-              <div class="controls">
-                <button class="addInput" onclick="addMultipleInputs('userProperty')">속성 추가</button>
-                <input id="userAddCount" type="number" value="1" min="1" max="200" />
-              </div>
-            </div>
-
-            <div id="fireButton">
-              <button onclick="sendGAData()">이벤트 전송하기</button>
-            </div>
+        <div class="setEvent">
+          <div id="eventType">
+            <button class="event select">페이지뷰</button>
+            <button class="event">이벤트</button>
+            <button class="event">전자상거래</button>
           </div>
 
-          <div id="viewData"></div>
+          <div id="content">
+            <div id="setData">
+              <div class="initDiv">
+                <button id="initButton" onclick="setInitValue()">초기값</button>
+              </div>
+              <div class="section">
+                <div class="sessionTitle">페이지 설정</div>
+                <div class="inputGroup">
+                  <label for="pageTitle">페이지 제목:</label>
+                  <input id="pageTitle" class="formInput page" type="text" value="GATester" />
+                  <div class="btn btn-rect" id="button-10">
+                    <input type="checkbox" class="checkbox titleType" />
+                    <div class="knob">
+                      <span>Str</span>
+                    </div>
+                    <div class="btn-bg"></div>
+                  </div>
+                </div>
+                <div class="inputGroup">
+                  <label for="pageURL">페이지 주소:</label>
+                  <input id="pageURL" class="formInput page" type="text" value="https://www.gatester.com/" />
+                  <div class="btn btn-rect" id="button-10">
+                    <input type="checkbox" class="checkbox locationType" />
+                    <div class="knob">
+                      <span>Str</span>
+                    </div>
+                    <div class="btn-bg"></div>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div id="preParam" class="section">
+                <div class="sessionTitle">사전 정의된 매개변수</div>
+                <div class="inputGroup">
+                  <select class="dropdown">
+                    <option value="contents_group">콘텐츠 그룹</option>
+                    <option value="user_id">사용자 ID</option>
+                  </select>
+                  <input class="formInput formValue" type="text" placeholder="값 입력" />
+                  <div class="btn btn-rect" id="button-10">
+                    <input type="checkbox" class="checkbox typeToggle" />
+                    <div class="knob">
+                      <span>Str</span>
+                    </div>
+                    <div class="btn-bg"></div>
+                  </div>
+                  <button class="removeButton" onclick="removeInput(this)">-</button>
+                </div>
+                <button class="addInput" onclick="addInput('preParam')">매개변수 추가</button>
+              </div>
+              <hr />
+              <div id="eventParam" class="section">
+                <div class="sessionTitle">이벤트 매개변수</div>
+                <div class="parameterGroup">
+                  <input class="formInput formKey" type="text" value="event_parameter1" />
+                  <input class="formInput formValue" type="text" placeholder="값 입력" />
+                  <div class="btn btn-rect" id="button-10">
+                    <input type="checkbox" class="checkbox typeToggle" />
+                    <div class="knob">
+                      <span>Str</span>
+                    </div>
+                    <div class="btn-bg"></div>
+                  </div>
+                  <button class="removeButton" onclick="removeInput(this)">-</button>
+                </div>
+                <div class="controls">
+                  <button class="addInput" onclick="addMultipleInputs('eventParam')">매개변수 추가</button>
+                  <input id="eventAddCount" type="number" value="1" min="1" max="200" />
+                </div>
+              </div>
+              <hr />
+              <div id="userProperty" class="section">
+                <div class="sessionTitle">사용자 속성</div>
+                <div class="parameterGroup">
+                  <input class="formInput formKey" type="text" value="user_property1" />
+                  <input class="formInput formValue" type="text" placeholder="값 입력" />
+                  <div class="btn btn-rect" id="button-10">
+                    <input type="checkbox" class="checkbox typeToggle" />
+                    <div class="knob">
+                      <span>Str</span>
+                    </div>
+                    <div class="btn-bg"></div>
+                  </div>
+                  <button class="removeButton" onclick="removeInput(this)">-</button>
+                </div>
+                <div class="controls">
+                  <button class="addInput" onclick="addMultipleInputs('userProperty')">속성 추가</button>
+                  <input id="userAddCount" type="number" value="1" min="1" max="200" />
+                </div>
+              </div>
+
+              <div id="fireButton">
+                <button onclick="sendGAData()">이벤트 전송하기</button>
+              </div>
+            </div>
+          </div>
         </div>
+        <div id="viewData" class="vscode-theme"></div>
       </div>
     </div>
   </body>

@@ -115,32 +115,37 @@ a {
   background-color: rgb(242, 245, 249);
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.setEvent {
+  display: flex;
 }
 
 #eventType {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
 }
 
 .event {
-  width: 90px;
-  height: 30px;
-  background-color: #a6cbff;
+  /* width: 90px; */
+  height: 35px;
+  background-color: rgb(242, 245, 249);
   margin-bottom: 10px;
   border-radius: 4px;
-  color: #fff;
+  border: none;
+  color: rgb(172, 178, 188);
 }
 
 .event:hover {
-  background-color: #1a73e8;
+  background-color: rgb(222, 225, 229);
 }
 
 .event.select {
-  background-color: #1a73e8;
-  color: #fff;
-  font-weight: bold;
-  border: 2px solid #0a58ca;
+  background-color: rgb(222, 225, 229);
+  color: rgb(46, 54, 69);
+  font-weight: 500;
+  border: none;
 }
 
 /* 콘텐츠 영역 */
@@ -151,22 +156,22 @@ a {
 
 #initButton {
   float: right;
-  margin: 15px;
 }
 
-#setData,
-#viewData {
+#setData {
   margin-left: 20px;
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
-  max-height: 750px;
+  height: 700px;
   overflow-y: scroll;
   border: 1px solid #ccc;
+  min-width: 644px;
+  box-sizing: border-box;
 }
 
-pre {
-  margin: 0px;
+.initDiv {
+  height: 22px;
 }
 
 .sessionTitle {
@@ -174,6 +179,11 @@ pre {
   color: rgba(0, 0, 0, 0.54);
   letter-spacing: 0.3px;
   padding-bottom: 10px;
+}
+
+.inputGroup, .parameterGroup {
+  display: flex;
+  align-items: center;
 }
 
 #preParam,
@@ -195,10 +205,10 @@ hr {
   border-radius: 4px;
   box-shadow: none;
   padding: 0px 0px 0px 12px;
-  height: 33px;
-  line-height: 38px;
-  width: 256px;
-  margin: 5px 16px 5px 0px;
+  height: 29px;
+  line-height: 29px;
+  width: 230px;
+  margin: 5px 16px 6px 0px;
   appearance: none;
   background-image: url(https://www.gstatic.com/images/icons/material/system/2x/arrow_drop_down_grey600_24dp.png);
   background-position: right 6px center;
@@ -210,16 +220,24 @@ hr {
   outline: solid 2px #1a73e8;
 }
 
+label {
+  font-size: 13px;
+}
+
+.formInput.page {
+  margin-left: 12px;
+}
+
 .formInput {
   border: solid 1px #dadce0;
   border-radius: 4px;
   padding-left: 12px;
   padding-right: 12px;
-  height: 28px;
+  height: 25px;
   line-height: 38px;
-  width: 230px;
+  width: 204px;
   margin: 5px 16px 6px 0px;
-  font-size: 14px;
+  font-size: 13px;
   font-family: Roboto, Helvetica Neue, sans-serif;
 }
 
@@ -240,7 +258,7 @@ hr {
   font-size: 12px;
   height: 30px;
   letter-spacing: 0.25px;
-  padding: 3px 24px 2px;
+  padding: 3px 12px;
   background-color: transparent;
   border-color: #dadce0;
   color: #1a73e8;
@@ -253,7 +271,6 @@ hr {
 
 #fireButton {
   text-align: center;
-  margin: 15px;
 }
 
 .tabs {
@@ -300,18 +317,179 @@ hr {
   color: #db1f1f;
 }
 
-/* 반응형 */
-@media (max-width: 1400px) {
-  .contentContainer {
-    height: 97%;
-  }
+.vscode-theme {
+  background-color: #282c34; /* Atom One Dark 배경색 */
+  color: #abb2bf; /* 기본 텍스트 색상 */
+  padding: 16px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  overflow: auto;
+  max-height: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  margin-left: 70px;
+  border-radius: 10px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  min-width: 400px;
+  max-width: 434px;
+}
 
-  #content {
-    margin-top: 10px;
-  }
+/* Syntax highlighting */
+.vscode-theme .key {
+  color: #61afef;
+}
+.vscode-theme .string {
+  color: #98c379;
+}
+.vscode-theme .number {
+  color: #d19a66;
+}
+.vscode-theme .boolean {
+  color: #e06c75;
+}
+.vscode-theme .null {
+  color: #c678dd;
+}
+.vscode-theme .bracket {
+  color: #e5c07b; /* 연한 노란색: 중괄호와 대괄호 */
+}
 
-  #setData,
-  #viewData {
-    max-height: 600px;
-  }
+/* Scrollbar styling */
+.vscode-theme::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.vscode-theme::-webkit-scrollbar-thumb {
+  background-color: #3c3c3c;
+  border-radius: 4px;
+}
+.vscode-theme::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.toggle-button-container {
+  position: relative;
+  width: 200px;
+  height: 140px;
+  box-sizing: border-box;
+}
+
+.toggle-button {
+  position: relative;
+  height: 100px;
+  margin: 20px;
+  background-color: #fff;
+  box-shadow: 0 10px 20px -8px #c5d6d6;
+  border-radius: 4px;
+}
+
+.toggle-button:before {
+  counter-increment: button-counter;
+  content: counter(button-counter);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #d7e3e3;
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px;
+}
+
+.knob,
+.btn-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.btn {
+  position: relative;
+  top: 50%;
+  width: 70px;
+  height: 26px;
+  overflow: hidden;
+}
+
+.btn.btn-pill,
+.btn.btn-pill > .btn-bg {
+  border-radius: 100px;
+}
+
+.btn.btn-rect {
+  border-radius: 2px;
+}
+
+.checkbox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.knob {
+  z-index: 2;
+}
+
+.btn-bg {
+  width: 100%;
+  background-color: #ebf7fc;
+  transition: 0.3s ease all;
+  z-index: 1;
+}
+
+#button-10 .knob:before,
+#button-10 .knob:after,
+#button-10 .knob span {
+  position: absolute;
+  top: 4px;
+  width: 20px;
+  height: 0px;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 0.2;
+  padding: 9px 4px;
+  border-radius: 2px;
+  transition: 0.3s ease all;
+}
+
+#button-10 .knob:before {
+  content: "";
+  left: 4px;
+  background-color: #03a9f4;
+}
+
+#button-10 .knob:after {
+  content: "Num";
+  right: 4px;
+  color: #4e4e4e;
+}
+
+#button-10 .knob span {
+  display: inline-block;
+  left: 4px;
+  color: #fff;
+  z-index: 1;
+}
+
+#button-10 .checkbox:checked + .knob span {
+  color: #4e4e4e;
+}
+
+#button-10 .checkbox:checked + .knob:before {
+  left: 38px;
+  background-color: #f44336;
+}
+
+#button-10 .checkbox:checked + .knob:after {
+  color: #fff;
+}
+
+#button-10 .checkbox:checked ~ .btn-bg {
+  background-color: #fcebeb;
 }
