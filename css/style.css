@@ -3,13 +3,16 @@
   src: url(../assets/GMPIcons.woff2);
 }
 
-html {
+/* html {
   height: 94.9%;
-}
+} */
 
 body {
-  height: 92.4%;
+  /* height: 92.4%; */
+  display: inline-block;
+  height: 92vh;
   margin: 0px;
+  width: 100vw;
 }
 
 .header {
@@ -43,8 +46,13 @@ body {
 }
 
 .container {
+  /* margin: 0px 8px;
+  height: 100%; */
+  display: grid;
   margin: 0px 8px;
+  grid-template-rows: 0fr auto;
   height: 100%;
+  width: 100%;
 }
 
 .line {
@@ -109,13 +117,22 @@ a {
 }
 
 .contentContainer {
-  height: 100%;
+  /* height: 100%;
   border: 1px solid rgb(210, 213, 218);
   border-top: none;
   background-color: rgb(242, 245, 249);
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-x: auto; */
+  background-color: rgb(242, 245, 249);
+  padding-top: 20px;
+  width: 100%;
+  display: inline-flex;
+  border: 1px solid rgb(210, 213, 218);
+  border-top: none;
+  align-items: center;
+  justify-content: center;
 }
 
 .setEvent {
@@ -125,10 +142,11 @@ a {
 #eventType {
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
 }
 
 .event {
-  /* width: 90px; */
+  width: 90px;
   height: 35px;
   background-color: rgb(242, 245, 249);
   margin-bottom: 10px;
@@ -156,6 +174,12 @@ a {
 
 #initButton {
   float: right;
+  font-size: 14px;
+  border: 1px solid;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-align: center;
+  align-content: center;
 }
 
 #setData {
@@ -164,7 +188,7 @@ a {
   background-color: #fff;
   border-radius: 10px;
   height: 700px;
-  overflow-y: scroll;
+  overflow: auto;
   border: 1px solid #ccc;
   min-width: 644px;
   box-sizing: border-box;
@@ -207,6 +231,7 @@ hr {
   padding: 0px 0px 0px 12px;
   height: 29px;
   line-height: 29px;
+  font-size: 13px;
   width: 230px;
   margin: 5px 16px 6px 0px;
   appearance: none;
@@ -318,14 +343,15 @@ label {
 }
 
 .vscode-theme {
+  align-self: center;
   background-color: #282c34; /* Atom One Dark 배경색 */
   color: #abb2bf; /* 기본 텍스트 색상 */
   padding: 16px;
   font-family: 'Consolas', 'Courier New', monospace;
   overflow: auto;
-  max-height: 500px;
+  max-height: 600px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  margin-left: 70px;
+  margin: 0px 20px 0px 50px;
   border-radius: 10px;
   overflow-y: scroll;
   border: 1px solid #ccc;
