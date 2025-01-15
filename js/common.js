@@ -1,14 +1,18 @@
 // 상수 정의
-const DEFAULT_EVENT_PARAM_COUNT = 2;
+const DEFAULT_CUSTOM_DIMENSION_COUNT = 2;
 const DEFAULT_USER_PROPERTY_COUNT = 2;
+const DEFAULT_CUSTOM_METRIC_COUNT = 1;
 const DEFAULT_ITEM_PARAM_COUNT = 1;
 const DEFAULT_PRODUCT_COUNT = 1;
 
 // 전역 변수 정의
-let eventParamCounter = DEFAULT_EVENT_PARAM_COUNT;
-let userPropertyCounter = DEFAULT_USER_PROPERTY_COUNT;
-let itemParamCounter = DEFAULT_ITEM_PARAM_COUNT;
-let productCounter = DEFAULT_PRODUCT_COUNT;
+let globalCounters = {
+  customDimensionCounter: DEFAULT_CUSTOM_DIMENSION_COUNT,
+  customMetricCounter: DEFAULT_CUSTOM_METRIC_COUNT,
+  userPropertyCounter: DEFAULT_USER_PROPERTY_COUNT,
+  itemParamCounter: DEFAULT_ITEM_PARAM_COUNT,
+  productCounter: DEFAULT_PRODUCT_COUNT,
+};
 
 let gaData = {
   eventParam: {},
@@ -24,10 +28,13 @@ const parseValue = (value, isNumber) => (isNumber ? Number(value) : value);
 
 // 변수 초기화 함수
 function resetVariables() {
-  eventParamCounter = DEFAULT_EVENT_PARAM_COUNT;
-  userPropertyCounter = DEFAULT_USER_PROPERTY_COUNT;
-  itemParamCounter = DEFAULT_ITEM_PARAM_COUNT;
-  productCounter = DEFAULT_PRODUCT_COUNT;
+  globalCounters = {
+    customDimensionCounter: DEFAULT_CUSTOM_DIMENSION_COUNT,
+    customMetricCounter: DEFAULT_CUSTOM_METRIC_COUNT,
+    userPropertyCounter: DEFAULT_USER_PROPERTY_COUNT,
+    itemParamCounter: DEFAULT_ITEM_PARAM_COUNT,
+    productCounter: DEFAULT_PRODUCT_COUNT,
+  };
 
   gaData = {
     eventParam: {},
@@ -83,7 +90,7 @@ function updateDataObject() {
 function processCustomParameters(selector, dataObject, targetObject) {
   getElements(selector).forEach((group) => {
     const keyInput = group.querySelector(".dropdown")?.value || group.querySelector(".formInput.formKey")?.value;
-    const valueInput = group.querySelector(".formInput.formValue")?.value || getElement("select.ecommerceSelect")?.value;
+    const valueInput = group.querySelector(".formInput.formValue")?.value || group.querySelector("select.ecommerceSelect")?.value;
     const paramType = group.querySelector(".typeToggle")?.checked;
 
     if (keyInput) {
@@ -177,14 +184,14 @@ function resetParametersToDefault() {
 
   // 이벤트 매개변수 초기화
   resetGroup("#eventParam .parameterGroup", {
-    ".formKey": "event_parameter1",
+    ".formKey": "ep_param1",
     ".formValue": "",
     ".typeDropdown": 0,
   });
 
   // 사용자 속성 초기화
   resetGroup("#userProperty .parameterGroup", {
-    ".formKey": "user_property1",
+    ".formKey": "up_param1",
     ".formValue": "",
     ".typeToggle": 0,
   });
@@ -202,7 +209,7 @@ function updatePredefinedOptions(selectedEvent) {
 
     const parentGroup = dropdown.closest(".inputGroup");
     const inputElement = parentGroup.querySelector(".formValue");
-    const typeDropdown = parentGroup.querySelector(".typeToggle");
+    const typeDropdown = parentGroup.querySelector(".dropdown");
 
     // 기존 전자상거래 select 요소가 있으면 제거
     const ecommerceSelect = parentGroup.querySelector(".ecommerceSelect");
@@ -225,7 +232,7 @@ function updatePredefinedOptions(selectedEvent) {
         newInput.classList.add("formInput", "formValue");
         newInput.placeholder = "값 입력";
 
-        typeDropdown.before(newInput);
+        typeDropdown.after(newInput);
       }
     }
 
@@ -260,7 +267,7 @@ function updatePredefinedOptions(selectedEvent) {
         <option value="refund">refund</option>
       `;
 
-      typeDropdown.before(newSelect);
+      typeDropdown.after(newSelect);
     }
 
     dropdown.selectedIndex = 0;
@@ -291,89 +298,21 @@ function addTransactionSection() {
   transactionSection.innerHTML = `
     <div id="transaction" class="section">
       <div class="sessionTitle">거래 매개변수</div>
-      <div class="inputGroup">
-        <select class="dropdown">
-          <option value="currency">currency</option>
-        </select>
-        <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
-          <div class="knob">
-            <span>Str</span>
+      <div id="transactionData">
+        <div class="inputGroup">
+          <select class="dropdown">
+            <option value="currency">currency</option>
+          </select>
+          <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
+          <div class="btn btn-rect" id="button-10">
+            <input type="checkbox" class="checkbox typeToggle" />
+            <div class="knob">
+              <span>Str</span>
+            </div>
+            <div class="btn-bg"></div>
           </div>
-          <div class="btn-bg"></div>
+          <button class="removeButton" onclick="removeInput(this)">-</button>
         </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>
-      <div class="inputGroup">
-        <select class="dropdown">
-          <option value="transaction_id">transaction_id</option>
-        </select>
-        <input class="formInput formValue" type="text" value="${getFormattedDate()}" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>
-      <div class="inputGroup">
-        <select class="dropdown">
-          <option value="value">value</option>
-        </select>
-        <input class="formInput formValue" type="text" value="10000" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>
-      <div class="inputGroup">
-        <select class="dropdown">
-          <option value="tax">tax</option>
-        </select>
-        <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>
-      <div class="inputGroup">
-        <select class="dropdown">
-          <option value="shipping">shipping</option>
-        </select>
-        <input class="formInput formValue" type="text" value="1000" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
-      </div>
-      <div class="inputGroup">
-        <select class="dropdown">
-          <option value="coupon">coupon</option>
-        </select>
-        <input class="formInput formValue" type="text" value="2000원 할인 쿠폰" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
       </div>
       <button class="addInput" onclick="addInput('transaction')">매개변수 추가</button>
     </div>
@@ -420,7 +359,7 @@ function selectedProductTab(event) {
         </select>
         <input class="formInput formValue" type="text" value="${value}" placeholder="값 입력" />
         <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" />
+          <input type="checkbox" class="checkbox typeToggle" ${dataType === "Num" ? "checked" : undefined}/>
           <div class="knob">
             <span>Str</span>
           </div>
@@ -436,7 +375,8 @@ function selectedProductTab(event) {
 
 // 상품 탭 추가 함수
 function addProductTab() {
-  productCounter++;
+  globalCounters["productCounter"]++;
+  const productCounter = globalCounters["productCounter"];
 
   // 상품 탭 추가
   const preSelectedTabs = getElements("#productTabs .tab");
@@ -578,7 +518,7 @@ function addItemSection() {
         </div>
       </div>
       <button class="addInput" onclick="addInput('items')">상품 매개변수 추가</button>
-      <button class="addInput" onclick="addMultipleInputs('itemParam')">항목 매개변수 추가</button>
+      <button class="addInput" onclick="addMultipleInputs('#productData', 'itemAddCount', 'ip_param')">항목 매개변수 추가</button>
       <input id="itemAddCount" type="number" value="1" min="1" max="200" />
     </div>
   `;
@@ -633,8 +573,8 @@ function addInput(type) {
 
       // 모든 옵션 목록
       const allOptions = [
-        { value: "contents_group", text: "콘텐츠 그룹" },
         { value: "user_id", text: "사용자 ID" },
+        { value: "contents_group", text: "콘텐츠 그룹" },
       ];
 
       // 사용 가능한 옵션 계산
@@ -669,7 +609,7 @@ function addInput(type) {
     const inputCnt = getElements("#transaction > div.inputGroup").length;
     const limitCnt = 6;
     if (inputCnt < limitCnt) {
-      const addButton = getElement("#transaction .addInput");
+      const addButton = getElement("#transactionData");
 
       // 이미 선택된 옵션 추적
       const usedOptions = Array.from(getElements("#transaction .dropdown")).map((dropdown) => dropdown.value);
@@ -693,7 +633,7 @@ function addInput(type) {
       }
 
       addButton.insertAdjacentHTML(
-        "beforebegin",
+        "beforeend",
         `<div class="inputGroup">
           <select class="dropdown">
             ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
@@ -777,74 +717,31 @@ function addInput(type) {
   updateDataObject();
 }
 
-function addMultipleInputs(type) {
-  let addCountInput;
-  let addButton;
-  if (type === "eventParam") {
-    addButton = getElement("#eventParam .addInput");
-    addCountInput = document.getElementById("eventAddCount");
-  } else if (type === "userProperty") {
-    addButton = getElement("#userProperty .addInput");
-    addCountInput = document.getElementById("userAddCount");
-  } else if (type === "itemParam") {
-    addButton = getElement("#productData");
-    addCountInput = document.getElementById("itemAddCount");
-  }
-  const count = parseInt(addCountInput.value, 10);
+function addMultipleInputs(selector, count, name) {
+  const addButton = getElement(selector);
+  const className = selector === "#productData" ? "inputGroup" : "parameterGroup";
+  const addCountInput = document.getElementById(count);
+  const parseCount = parseInt(addCountInput.value, 10);
+  const counterKey = name === "ep_param" ? "customDimensionCounter" : name === "cm_param" ? "customMetricCounter" : name === "up_param" ? "userPropertyCounter" : "itemParamCounter";
 
-  for (let i = 0; i < count; i++) {
-    if (type === "eventParam") {
-      addButton.insertAdjacentHTML(
-        "beforebegin",
-        `<div class="parameterGroup">
-          <input class="formInput formKey" type="text" value="event_parameter${eventParamCounter}" />
-          <input class="formInput formValue" type="text" placeholder="값 입력" />
-          <div class="btn btn-rect" id="button-10">
-            <input type="checkbox" class="checkbox typeToggle" />
-            <div class="knob">
-              <span>Str</span>
-            </div>
-            <div class="btn-bg"></div>
+  for (let i = 0; i < parseCount; i++) {
+    addButton.insertAdjacentHTML(
+      "beforeend",
+      `<div class="${className}">
+        <input class="formInput formKey" type="text" value="${name + globalCounters[counterKey]}" />
+        <input class="formInput formValue" type="text" placeholder="값 입력" />
+        <div class="btn btn-rect" id="button-10">
+          <input type="checkbox" class="checkbox typeToggle" ${name === "cm_param" ? "checked" : undefined}/>
+          <div class="knob">
+            <span>Str</span>
           </div>
-          <button class="removeButton" onclick="removeInput(this)">-</button>
-        </div>`
-      );
-      eventParamCounter++;
-    } else if (type === "userProperty") {
-      addButton.insertAdjacentHTML(
-        "beforebegin",
-        `<div class="parameterGroup">
-          <input class="formInput formKey" type="text" value="user_property${userPropertyCounter}" />
-          <input class="formInput formValue" type="text" placeholder="값 입력" />
-          <div class="btn btn-rect" id="button-10">
-            <input type="checkbox" class="checkbox typeToggle" />
-            <div class="knob">
-              <span>Str</span>
-            </div>
-            <div class="btn-bg"></div>
-          </div>
-          <button class="removeButton" onclick="removeInput(this)">-</button>
-        </div>`
-      );
-      userPropertyCounter++;
-    } else if (type === "itemParam") {
-      addButton.insertAdjacentHTML(
-        "beforeend",
-        `<div class="inputGroup">
-          <input class="formInput formKey" type="text" value="item_parameter${itemParamCounter}" />
-          <input class="formInput formValue" type="text" placeholder="값 입력" />
-          <div class="btn btn-rect" id="button-10">
-            <input type="checkbox" class="checkbox typeToggle" />
-            <div class="knob">
-              <span>Str</span>
-            </div>
-            <div class="btn-bg"></div>
-          </div>
-          <button class="removeButton" onclick="removeInput(this)">-</button>
-        </div>`
-      );
-      itemParamCounter++;
-    }
+          <div class="btn-bg"></div>
+        </div>
+        <button class="removeButton" onclick="removeInput(this)">-</button>
+      </div>`
+    );
+
+    globalCounters[counterKey]++;
   }
 
   bindRealTimeUpdate();
@@ -898,7 +795,7 @@ function setInitValue() {
   getElements(".formValue").forEach((formValue) => {
     const key = formValue.parentElement.querySelector(".dropdown")?.value;
     if (!formValue.value) {
-      formValue.value = keyMapping(key);
+      formValue.value = key === "event_name" ? "click_event" : "테스트 입니다.";
     }
   });
 
@@ -907,6 +804,18 @@ function setInitValue() {
   // }
   updateDataObject();
 }
+
+function setEcommerceInit() {
+  // 거래 데이터 설정
+  const transactionDataDiv = document.getElementById("transactionData");
+  transactionDataDiv.innerHTML = "";
+
+  // 상품 데이터 설정
+  const productDataDiv = document.getElementById("productData");
+  productDataDiv.innerHTML = "";
+}
+
+function processEcommerce() {}
 
 // 초기화 실행
 document.addEventListener("DOMContentLoaded", () => {

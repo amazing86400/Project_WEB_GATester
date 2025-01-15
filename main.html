@@ -73,8 +73,8 @@
                 <div class="sessionTitle">사전 정의된 매개변수</div>
                 <div class="inputGroup">
                   <select class="dropdown">
-                    <option value="contents_group">콘텐츠 그룹</option>
                     <option value="user_id">사용자 ID</option>
+                    <option value="contents_group">콘텐츠 그룹</option>
                   </select>
                   <input class="formInput formValue" type="text" placeholder="값 입력" />
                   <div class="btn btn-rect" id="button-10">
@@ -90,41 +90,46 @@
               </div>
               <hr />
               <div id="eventParam" class="section">
-                <div class="sessionTitle">이벤트 매개변수</div>
-                <div class="parameterGroup">
-                  <input class="formInput formKey" type="text" value="event_parameter1" />
-                  <input class="formInput formValue" type="text" placeholder="값 입력" />
-                  <div class="btn btn-rect" id="button-10">
-                    <input type="checkbox" class="checkbox typeToggle" />
-                    <div class="knob">
-                      <span>Str</span>
+                <div id="eventGroup">
+                  <div class="sessionTitle">이벤트 매개변수</div>
+                  <div class="parameterGroup">
+                    <input class="formInput formKey" type="text" value="ep_param1" />
+                    <input class="formInput formValue" type="text" placeholder="값 입력" />
+                    <div class="btn btn-rect" id="button-10">
+                      <input type="checkbox" class="checkbox typeToggle" />
+                      <div class="knob">
+                        <span>Str</span>
+                      </div>
+                      <div class="btn-bg"></div>
                     </div>
-                    <div class="btn-bg"></div>
+                    <button class="removeButton" onclick="removeInput(this)">-</button>
                   </div>
-                  <button class="removeButton" onclick="removeInput(this)">-</button>
                 </div>
                 <div class="controls">
-                  <button class="addInput" onclick="addMultipleInputs('eventParam')">매개변수 추가</button>
+                  <button class="addInput" onclick="addMultipleInputs('#eventGroup', 'eventAddCount', 'ep_param')">측정기준 추가</button>
+                  <button class="addInput" onclick="addMultipleInputs('#eventGroup', 'eventAddCount', 'cm_param')">측정항목 추가</button>
                   <input id="eventAddCount" type="number" value="1" min="1" max="200" />
                 </div>
               </div>
               <hr />
               <div id="userProperty" class="section">
-                <div class="sessionTitle">사용자 속성</div>
-                <div class="parameterGroup">
-                  <input class="formInput formKey" type="text" value="user_property1" />
-                  <input class="formInput formValue" type="text" placeholder="값 입력" />
-                  <div class="btn btn-rect" id="button-10">
-                    <input type="checkbox" class="checkbox typeToggle" />
-                    <div class="knob">
-                      <span>Str</span>
+                <div id="userGroup">
+                  <div class="sessionTitle">사용자 속성</div>
+                  <div class="parameterGroup">
+                    <input class="formInput formKey" type="text" value="up_param1" />
+                    <input class="formInput formValue" type="text" placeholder="값 입력" />
+                    <div class="btn btn-rect" id="button-10">
+                      <input type="checkbox" class="checkbox typeToggle" />
+                      <div class="knob">
+                        <span>Str</span>
+                      </div>
+                      <div class="btn-bg"></div>
                     </div>
-                    <div class="btn-bg"></div>
+                    <button class="removeButton" onclick="removeInput(this)">-</button>
                   </div>
-                  <button class="removeButton" onclick="removeInput(this)">-</button>
                 </div>
                 <div class="controls">
-                  <button class="addInput" onclick="addMultipleInputs('userProperty')">속성 추가</button>
+                  <button class="addInput" onclick="addMultipleInputs('#userGroup', 'userAddCount', 'up_param')">속성 추가</button>
                   <input id="userAddCount" type="number" value="1" min="1" max="200" />
                 </div>
               </div>
