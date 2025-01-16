@@ -8,6 +8,7 @@ gtag("js", new Date());
 gtag("config", "G-VVYW8HV971", {
   page_title: "GATester",
   debug_mode: true,
+  send_page_view: false
 });
 
 // 데이터 전송 함수
