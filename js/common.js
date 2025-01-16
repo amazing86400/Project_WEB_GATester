@@ -135,17 +135,17 @@ function resetParametersToDefault() {
 //#region cid 설정 함수 모음
 // cid 설정하기 함수
 function setClientId() {
-  const eventType = getElement("#eventType > button.event.select").textContent;
-  const preParamInput = eventType === "페이지뷰" ? getElement("#preParam .formInput.formValue") : undefined;
   const userPropertyInput = getElement("#userGroup .formInput.formValue");
   const clientIdValue = getClientId();
   userPropertyInput.value = clientIdValue;
-  if (preParamInput) preParamInput.value = clientIdValue;
 }
 
 // cid 가져오기 함수
 function getClientId() {
-  return document.cookie.split("_ga=GA1.1.")[1].split(";")[0];
+  const clientId = document.cookie.split("_ga=GA1.1.")[1]?.split(";")[0];
+  if (!clientId) return "새로고침을 하시면 cid가 설정됩니다.";
+
+  return clientId;
 }
 //#endregion
 
@@ -200,7 +200,7 @@ function processCustomParameters(selector, dataObject, targetObject) {
     const paramType = group.querySelector(".typeToggle")?.checked;
 
     if (keyInput) {
-      const value = parseValue(valueInput, paramType);
+      const value = parseValue(valueInput, paramType) == undefined ? "" : parseValue(valueInput, paramType);
       dataObject[keyInput] = value;
       targetObject[keyInput] = value;
     }
@@ -347,8 +347,8 @@ function setSelectedButton(event) {
 
   resetParametersToDefault();
   setClientId();
-  bindRealTimeUpdate();
   updateDataObject();
+  bindRealTimeUpdate();
 }
 
 // 사전 정의 및 전자상거래 추가 함수
@@ -445,8 +445,8 @@ function addInput(type) {
     alert("모든 매개변수가 추가되었습니다.");
   }
 
-  bindRealTimeUpdate();
   updateDataObject();
+  bindRealTimeUpdate();
 }
 
 // 이벤트 매개변수 및 사용자 속성 추가 함수
@@ -477,8 +477,8 @@ function addMultipleInputs(selector, count, name) {
     globalCounters[counterKey]++;
   }
 
-  bindRealTimeUpdate();
   updateDataObject();
+  bindRealTimeUpdate();
 }
 
 // 삭제 함수
@@ -504,8 +504,8 @@ function setInitValue() {
     setEcommerceInit();
   }
 
-  // bindRealTimeUpdate();
   updateDataObject();
+  bindRealTimeUpdate();
 }
 
 // 기본 값 가져오기
@@ -534,7 +534,7 @@ function setEcommerceInit() {
   for (let i = 1; i <= globalCounters.productCounter; i++) {
     products[`id${i}`] = {};
     Object.entries(itemObject).forEach(([key, value]) => {
-      products[`id${i}`][key] = ["item_id", "item_name", "index"].includes(key) ? `${value}${i}` : value;
+      products[`id${i}`][key] = key === "index" ? Number(value) + i : ["item_id", "item_name"].includes(key) ? `${value}${i}` : value;
     });
   }
 
@@ -710,6 +710,8 @@ function selectProductTab(event) {
 
     const productIndex = target.closest("div").dataset.productIndex;
     viewCurrentProduct(productIndex);
+
+    bindRealTimeUpdate();
   }
 }
 
@@ -790,6 +792,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setClientId();
 
   updatePredefinedOptions("페이지뷰");
-  bindRealTimeUpdate();
   updateDataObject();
+  bindRealTimeUpdate();
 });
