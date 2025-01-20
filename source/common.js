@@ -157,8 +157,8 @@ function updateDataObject() {
   // 페이지 제목 및 페이지 주소 설정
   const pageTitle = document.getElementById("pageTitle").value;
   const pageURL = document.getElementById("pageURL").value;
-  const titleType = getElement(".titleType").checked;
-  const locationType = getElement(".locationType").checked;
+  const titleType = getElement(".titleType").classList.contains('active');
+  const locationType = getElement(".locationType").classList.contains('active');
   dataObject.page_title = parseValue(pageTitle, titleType);
   dataObject.page_location = parseValue(pageURL, locationType);
 
@@ -175,7 +175,7 @@ function updateDataObject() {
   transactions.forEach((group) => {
     const dropdown = group.querySelector(".dropdown").value;
     const input = group.querySelector(".formInput").value;
-    const paramType = group.querySelector(".typeToggle").checked;
+    const paramType = group.querySelector(".toggleButton").classList.contains('active');
 
     if (dropdown) {
       const value = parseValue(input, paramType);
@@ -197,7 +197,7 @@ function processCustomParameters(selector, dataObject, targetObject) {
   getElements(selector).forEach((group) => {
     const keyInput = group.querySelector(".dropdown")?.value || group.querySelector(".formInput.formKey")?.value;
     const valueInput = group.querySelector(".formInput.formValue")?.value || group.querySelector("select.ecommerceSelect")?.value;
-    const paramType = group.querySelector(".typeToggle")?.checked;
+    const paramType = group.querySelector(".typeToggle")?.classList.contains('active');
 
     if (keyInput) {
       const value = parseValue(valueInput, paramType) == undefined ? "" : parseValue(valueInput, paramType);
@@ -218,7 +218,7 @@ function processItems(dataObject) {
   items.forEach((group) => {
     const key = group.querySelector(".dropdown")?.value || group.querySelector(".formInput.formKey")?.value;
     const value = group.querySelector(".formInput.formValue")?.value;
-    const paramType = group.querySelector(".typeToggle")?.checked;
+    const paramType = group.querySelector(".typeToggle")?.classList.contains('active');
 
     if (key) {
       products[`id${productIndex}`][key] = parseValue(value, paramType);
@@ -319,10 +319,11 @@ function updatePredefinedOptions(selectedEvent) {
 
 // 실시간 업데이트 이벤트 바인딩
 function bindRealTimeUpdate() {
-  const inputs = getElements("input.formInput, select, input.checkbox");
+  const inputs = getElements("input.formInput, select, div.toggleButton");
   inputs.forEach((input) => {
     input.addEventListener("input", updateDataObject);
     input.addEventListener("change", updateDataObject);
+    input.addEventListener("click", updateDataObject);
   });
 }
 //#endregion
@@ -330,9 +331,9 @@ function bindRealTimeUpdate() {
 //#region 매개변수 추가 및 각종 기능
 // 이벤트 타입 설정 함수
 function setSelectedButton(event) {
-  const buttons = getElements("#eventType .event");
+  const buttons = getElements("#eventType .eventDiv");
   buttons.forEach((button) => button.classList.remove("select"));
-  const clickedButton = event.target;
+  const clickedButton = event.target.closest('.eventDiv');
   clickedButton.classList.add("select");
 
   const selectedEvent = clickedButton.innerText;
@@ -431,14 +432,8 @@ function addInput(type) {
           ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
         </select>
         <input class="formInput formValue" type="text" placeholder="값 입력"/>
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" ${availableOptions[0].type === "Num" ? "checked" : undefined} />
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
+        <div class="toggleButton typeToggle ${availableOptions[0].type === "Num" ? "active" : ""}" onclick="toggleBtn(this)">${availableOptions[0].type === "Num" ? "Num" : "Str"}</div>
+        <button class="removeButton" onclick="removeInput(this)">x</button>
       </div>`
     );
   } else {
@@ -463,14 +458,8 @@ function addMultipleInputs(selector, count, name) {
       `<div class="${className}">
         <input class="formInput formKey" type="text" value="${name + globalCounters[counterKey]}" />
         <input class="formInput formValue" type="text" placeholder="값 입력" />
-        <div class="btn btn-rect" id="button-10">
-          <input type="checkbox" class="checkbox typeToggle" ${name === "cm_param" ? "checked" : undefined}/>
-          <div class="knob">
-            <span>Str</span>
-          </div>
-          <div class="btn-bg"></div>
-        </div>
-        <button class="removeButton" onclick="removeInput(this)">-</button>
+        <div class="toggleButton typeToggle ${name === "cm_param" ? "active" : undefined}" onclick="toggleBtn(this)">${name === "cm_param" ? "Num" : "Str"}</div>
+        <button class="removeButton" onclick="removeInput(this)">x</button>
       </div>`
     );
 
@@ -481,12 +470,34 @@ function addMultipleInputs(selector, count, name) {
   bindRealTimeUpdate();
 }
 
+// 타입 토글 함수
+function toggleBtn(button) {
+  button.classList.toggle('active');
+  button.textContent = button.classList.contains('active') ? 'Num' : 'Str';
+}
+
 // 삭제 함수
 function removeInput(button) {
   const parent = button.closest(".inputGroup, .parameterGroup");
   if (parent) {
     parent.remove();
     updateDataObject();
+  }
+}
+
+// numInput 숫자 증가 함수
+function numPlus(button) {
+  const input = button.closest('.controls').querySelector('.numInput');
+  if (parseInt(input.value) < 201) {
+    input.value = parseInt(input.value) + 1;
+  }
+}
+
+// numInput 숫자 감소 함수
+function numMinus(button) {
+  const input = button.closest('.controls').querySelector('.numInput');
+  if (parseInt(input.value) > 0) {
+    input.value = parseInt(input.value) - 1;
   }
 }
 
@@ -500,7 +511,7 @@ function setInitValue() {
   });
 
   // 전자상거래 초기값 설정 추가
-  if (getElement("#eventType > button.event.select").textContent === "전자상거래") {
+  if (getElement("#eventType > div.eventDiv.select >.event").textContent === "전자상거래") {
     setEcommerceInit();
   }
 
@@ -576,14 +587,8 @@ function addTransactionSection() {
             <option value="currency">currency</option>
           </select>
           <input class="formInput formValue" type="text" value="KRW" placeholder="값 입력" />
-          <div class="btn btn-rect" id="button-10">
-            <input type="checkbox" class="checkbox typeToggle" />
-            <div class="knob">
-              <span>Str</span>
-            </div>
-            <div class="btn-bg"></div>
-          </div>
-          <button class="removeButton" onclick="removeInput(this)">-</button>
+          <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
+          <button class="removeButton" onclick="removeInput(this)">x</button>
         </div>
       </div>
       <button class="addInput" onclick="addInput('transaction')">매개변수 추가</button>
@@ -607,7 +612,9 @@ function addItemSection() {
       <div id="productTabs" class="tabs">
         <div class="tab select" data-product-index="1" onclick="selectProductTab(event)">
           <span>상품 1</span>
-          <button class="removeTab" onclick="removeProductTab(event)">X</button>
+          <div class="removeDiv">
+            <button class="removeTab" onclick="removeProductTab(event)">x</button>
+          </div>
         </div>
         <button id="addTab" onclick="addProductTab()">+</button>
       </div>
@@ -617,33 +624,27 @@ function addItemSection() {
             <option value="item_id">item_id</option>
           </select>
           <input class="formInput formValue" type="text" value="G-1" placeholder="값 입력" />
-          <div class="btn btn-rect" id="button-10">
-            <input type="checkbox" class="checkbox typeToggle" />
-            <div class="knob">
-              <span>Str</span>
-            </div>
-            <div class="btn-bg"></div>
-          </div>
-          <button class="removeButton" onclick="removeInput(this)">-</button>
+          <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
+          <button class="removeButton" onclick="removeInput(this)">x</button>
         </div>
         <div class="inputGroup">
           <select class="dropdown formKey">
             <option value="item_name">item_name</option>
           </select>
           <input class="formInput formValue" type="text" value="상품1" placeholder="값 입력" />
-          <div class="btn btn-rect" id="button-10">
-            <input type="checkbox" class="checkbox typeToggle" />
-            <div class="knob">
-              <span>Str</span>
-            </div>
-            <div class="btn-bg"></div>
-          </div>
-          <button class="removeButton" onclick="removeInput(this)">-</button>
+          <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
+          <button class="removeButton" onclick="removeInput(this)">x</button>
         </div>
       </div>
-      <button class="addInput" onclick="addInput('items')">상품 매개변수 추가</button>
-      <button class="addInput" onclick="addMultipleInputs('#productData', 'itemAddCount', 'ip_param')">항목 매개변수 추가</button>
-      <input id="itemAddCount" type="number" value="1" min="1" max="200" />
+      <div class="controls">
+        <button class="addInput" onclick="addInput('items')">상품 매개변수 추가</button>
+        <button class="addInput" onclick="addMultipleInputs('#productData', 'itemAddCount', 'ip_param')">항목 매개변수 추가</button>
+        <input id="itemAddCount" class="numInput" type="number" value="1" min="1" max="200" />
+        <div>
+          <div class="numPlus" onclick="numPlus(this)">+</div>
+          <div class="numMinus" onclick="numMinus(this)">-</div>
+        </div>
+      </div>
     </div>
   `;
 
@@ -676,7 +677,9 @@ function addProductTab() {
   newTab.dataset.productIndex = productCounter;
   newTab.innerHTML = `
     <span>상품 ${productCounter}</span>
-    <button class="removeTab" onclick="removeProductTab(event)">X</button>
+    <div class="removeDiv">
+      <button class="removeTab" onclick="removeProductTab(event)">x</button>
+    </div>
   `;
   newTab.addEventListener("click", (event) => selectProductTab(event));
   tabContainer.insertBefore(newTab, getElement("#addTab"));
@@ -738,14 +741,8 @@ function createInputGroup(key, value) {
       <option value="${key}">${key}</option>
     </select>
     <input class="formInput formValue" type="text" value="${value}" placeholder="값 입력" />
-    <div class="btn btn-rect" id="button-10">
-      <input type="checkbox" class="checkbox typeToggle" ${dataType === "Num" ? "checked" : ""} />
-      <div class="knob">
-        <span>${dataType}</span>
-      </div>
-      <div class="btn-bg"></div>
-    </div>
-    <button class="removeButton" onclick="removeInput(this)">-</button>
+    <div class="toggleButton titleType ${dataType === "Num" ? "active" : ""}" onclick="toggleBtn(this)">${dataType === "Num" ? "Num" : "Str"}</div>
+    <button class="removeButton" onclick="removeInput(this)">x</button>
   `;
 
   return inputGroup;
@@ -756,11 +753,14 @@ function removeProductTab(event) {
   const currentTab = event.target;
 
   // 다른 탭 선택 (첫 번째 탭으로 이동)
-  const previousTab = currentTab.parentElement.previousElementSibling;
-  const nextTab = currentTab.parentElement.nextElementSibling;
+  const previousTab = currentTab.closest('.tab').previousElementSibling;
+  // const previousTab = currentTab.parentElement.previousElementSibling;
+  const nextTab = currentTab.closest('.tab').nextElementSibling;
+  // const nextTab = currentTab.parentElement.nextElementSibling;
 
   // 상품 탭 삭제
-  const productIndex = currentTab.parentElement.dataset.productIndex;
+  const productIndex = currentTab.closest('.tab').dataset.productIndex;
+  // const productIndex = currentTab.parentElement.dataset.productIndex;
   const tab = getElement(`.tab[data-product-index="${productIndex}"]`);
   if (tab) {
     tab.remove();
@@ -782,7 +782,7 @@ function removeProductTab(event) {
 
 // 초기화 실행
 document.addEventListener("DOMContentLoaded", () => {
-  const buttons = getElements("#eventType .event");
+  const buttons = getElements("#eventType .eventDiv");
   buttons[0].classList.add("select");
 
   buttons.forEach((button) => {

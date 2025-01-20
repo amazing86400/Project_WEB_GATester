@@ -41,117 +41,115 @@
       <!-- 콘텐츠 영역 -->
       <div class="contentContainer">
         <div class="setEvent">
-          <div id="eventType">
-            <button class="event select">페이지뷰</button>
-            <button class="event">이벤트</button>
-            <button class="event">전자상거래</button>
-          </div>
-
           <div id="content">
             <div id="setData">
-              <div class="initDiv">
+              <div class="topDiv">
+                <div id="eventType">
+                  <div class="eventDiv select">
+                    <div class="event">페이지뷰</div>
+                  </div>
+                  <div class="eventDiv">
+                    <div class="event">이벤트</div>
+                  </div>
+                  <div class="eventDiv">
+                    <div class="event">전자상거래</div>
+                  </div>
+                </div>
+                <div class="btnDiv">
+                  <div class="min"></div>
+                  <div class="max" onclick="setInitValue()"></div>
+                  <div class="close"></div>
+                </div>
+              </div>
+              <!-- <div class="initDiv">
                 <div id="initButton" onclick="setInitValue()">자동 입력</div>
-              </div>
-              <div class="section">
-                <div class="sessionTitle">페이지 설정</div>
-                <div class="inputGroup">
-                  <label for="pageTitle">페이지 제목:</label>
-                  <input id="pageTitle" class="formInput page" type="text" value="GATester" />
-                  <div class="btn btn-rect" id="button-10">
-                    <input type="checkbox" class="checkbox titleType" />
-                    <div class="knob">
-                      <span>Str</span>
-                    </div>
-                    <div class="btn-bg"></div>
-                  </div>
-                </div>
-                <div class="inputGroup">
-                  <label for="pageURL">페이지 주소:</label>
-                  <input id="pageURL" class="formInput page" type="text" value="https://www.gatester.com/" />
-                  <div class="btn btn-rect" id="button-10">
-                    <input type="checkbox" class="checkbox locationType" />
-                    <div class="knob">
-                      <span>Str</span>
-                    </div>
-                    <div class="btn-bg"></div>
-                  </div>
-                </div>
-              </div>
-              <hr />
-              <div id="preParam" class="section">
-                <div class="sessionTitle">사전 정의된 매개변수</div>
-                <div class="inputGroup">
-                  <select class="dropdown">
-                    <option value="user_id">User ID</option>
-                    <option value="client_id">Client ID</option>
-                    <option value="contents_group">콘텐츠 그룹</option>
-                  </select>
-                  <input class="formInput formValue" type="text" placeholder="값 입력" />
-                  <div class="btn btn-rect" id="button-10">
-                    <input type="checkbox" class="checkbox typeToggle" />
-                    <div class="knob">
-                      <span>Str</span>
-                    </div>
-                    <div class="btn-bg"></div>
-                  </div>
-                  <button class="removeButton" onclick="removeInput(this)">-</button>
-                </div>
-                <button class="addInput" onclick="addInput('preParam')">매개변수 추가</button>
-              </div>
-              <hr />
-              <div id="eventParam" class="section">
-                <div id="eventGroup">
-                  <div class="sessionTitle">이벤트 매개변수</div>
-                  <div class="parameterGroup">
-                    <input class="formInput formKey" type="text" value="ep_param1" />
-                    <input class="formInput formValue" type="text" placeholder="값 입력" />
-                    <div class="btn btn-rect" id="button-10">
-                      <input type="checkbox" class="checkbox typeToggle" />
+              </div> -->
+              <div class="sectionDiv">
+                <div class="section">
+                  <div class="sessionTitle">페이지 설정</div>
+                  <div class="inputGroup">
+                    <label for="pageTitle">페이지 제목:</label>
+                    <input id="pageTitle" class="formInput page" type="text" value="GATester" />
+                    <div class="toggleButton titleType" onclick="toggleBtn(this)">Str</div>
+                    <!-- <div class="btn btn-rect" id="button-10">
+                      <input type="checkbox" class="checkbox titleType" />
                       <div class="knob">
                         <span>Str</span>
                       </div>
                       <div class="btn-bg"></div>
-                    </div>
-                    <button class="removeButton" onclick="removeInput(this)">-</button>
+                    </div> -->
+                  </div>
+                  <div class="inputGroup">
+                    <label for="pageURL">페이지 주소:</label>
+                    <input id="pageURL" class="formInput page" type="text" value="https://www.gatester.com/" />
+                    <div class="toggleButton locationType" onclick="toggleBtn(this)">Str</div>
                   </div>
                 </div>
-                <div class="controls">
-                  <button class="addInput" onclick="addMultipleInputs('#eventGroup', 'eventAddCount', 'ep_param')">측정기준 추가</button>
-                  <button class="addInput" onclick="addMultipleInputs('#eventGroup', 'eventAddCount', 'cm_param')">측정항목 추가</button>
-                  <input id="eventAddCount" type="number" value="1" min="1" max="200" />
-                </div>
-              </div>
-              <hr />
-              <div id="userProperty" class="section">
-                <div id="userGroup">
-                  <div class="sessionTitle">사용자 속성</div>
-                  <div class="parameterGroup">
-                    <input class="formInput formKey" type="text" value="up_param1" />
+                <div id="preParam" class="section">
+                  <div class="sessionTitle">사전 정의된 매개변수</div>
+                  <div class="inputGroup">
+                    <select class="dropdown">
+                      <option value="user_id">User ID</option>
+                      <option value="client_id">Client ID</option>
+                      <option value="contents_group">콘텐츠 그룹</option>
+                    </select>
                     <input class="formInput formValue" type="text" placeholder="값 입력" />
-                    <div class="btn btn-rect" id="button-10">
-                      <input type="checkbox" class="checkbox typeToggle" />
-                      <div class="knob">
-                        <span>Str</span>
-                      </div>
-                      <div class="btn-bg"></div>
+                    <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
+                    <button class="removeButton" onclick="removeInput(this)">x</button>
+                  </div>
+                  <button class="addInput" onclick="addInput('preParam')">매개변수 추가</button>
+                </div>
+                <div id="eventParam" class="section">
+                  <div id="eventGroup">
+                    <div class="sessionTitle">이벤트 매개변수</div>
+                    <div class="parameterGroup">
+                      <input class="formInput formKey" type="text" value="ep_param1" />
+                      <input class="formInput formValue" type="text" placeholder="값 입력" />
+                      <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
+                      <button class="removeButton" onclick="removeInput(this)">x</button>
                     </div>
-                    <button class="removeButton" onclick="removeInput(this)">-</button>
+                  </div>
+                  <div class="controls">
+                    <button class="addInput" onclick="addMultipleInputs('#eventGroup', 'eventAddCount', 'ep_param')">측정기준 추가</button>
+                    <button class="addInput" onclick="addMultipleInputs('#eventGroup', 'eventAddCount', 'cm_param')">측정항목 추가</button>
+                    <input id="eventAddCount" class="numInput" type="number" value="1" min="1" max="200" />
+                    <div>
+                      <div class="numPlus" onclick="numPlus(this)">+</div>
+                      <div class="numMinus" onclick="numMinus(this)">-</div>
+                    </div>
                   </div>
                 </div>
-                <div class="controls">
-                  <button class="addInput" onclick="addMultipleInputs('#userGroup', 'userAddCount', 'up_param')">속성 추가</button>
-                  <input id="userAddCount" type="number" value="1" min="1" max="200" />
+                <div id="userProperty" class="section">
+                  <div id="userGroup">
+                    <div class="sessionTitle">사용자 속성</div>
+                    <div class="parameterGroup">
+                      <input class="formInput formKey" type="text" value="up_param1" />
+                      <input class="formInput formValue" type="text" placeholder="값 입력" />
+                      <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
+                      <button class="removeButton" onclick="removeInput(this)">x</button>
+                    </div>
+                  </div>
+                  <div class="controls">
+                    <button class="addInput" onclick="addMultipleInputs('#userGroup', 'userAddCount', 'up_param')">속성 추가</button>
+                    <input id="userAddCount" class="numInput" type="number" value="1" min="1" max="200" />
+                    <div>
+                      <div class="numPlus" onclick="numPlus(this)">+</div>
+                      <div class="numMinus" onclick="numMinus(this)">-</div>
+                    </div>
+                  </div>
+                </div>
+                <div id="fireButton">
+                  <div onclick="sendGAData()"></div>
                 </div>
               </div>
-
-              <div id="fireButton">
-                <button onclick="sendGAData()">이벤트 전송하기</button>
               </div>
-            </div>
           </div>
         </div>
         <div id="viewData" class="vscode-theme"></div>
       </div>
+    </div>
+    <div>
+      <div></div>
     </div>
   </body>
 </html>

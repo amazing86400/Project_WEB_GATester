@@ -1,14 +1,37 @@
 @font-face {
   font-family: "GMP Icons";
-  src: url(../assets/GMPIcons.woff2);
+  src: url(./assets/GMPIcons.woff2);
 }
 
-/* html {
-  height: 94.9%;
-} */
+@font-face {
+  font-family: 'Neo Pro';
+  src:url('./assets/NeoDunggeunmoPro-Regular.woff2') format('woff2');
+} 
+
+@font-face {
+  font-family: 'Neo';
+  src:url('./assets/neodgm_code.woff2') format('woff2');
+} 
+
+@font-face {
+  font-family: 'Galmuri';
+  src:url('./assets/Galmuri11.woff2') format('woff2');
+} 
+
+@font-face {
+  font-family: 'Galmuri-Bold';
+  src:url('./assets/Galmuri11-Bold.woff2') format('woff2');
+} 
+
+* {
+  font-family: 'Neo';
+}
+
+html {
+  cursor: url(./assets/cursor1.svg) 5 5, auto;
+}
 
 body {
-  /* height: 92.4%; */
   display: inline-block;
   height: 92vh;
   margin: 0px;
@@ -42,12 +65,9 @@ body {
 
 .containerHeader {
   display: flex;
-  /* border-bottom: 2px solid rgb(238,240,243); */
 }
 
 .container {
-  /* margin: 0px 8px;
-  height: 100%; */
   display: grid;
   margin: 0px 8px;
   grid-template-rows: 0fr auto;
@@ -58,7 +78,6 @@ body {
 .line {
   width: 100%;
   border-bottom: 1px solid rgb(210, 213, 218);
-  /* margin-right: 1px; */
 }
 
 .firebase,
@@ -117,15 +136,8 @@ a {
 }
 
 .contentContainer {
-  /* height: 100%;
-  border: 1px solid rgb(210, 213, 218);
-  border-top: none;
-  background-color: rgb(242, 245, 249);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-x: auto; */
-  background-color: rgb(242, 245, 249);
+  /* background-color: rgb(242, 245, 249); */
+  background-image: url(./assets/background2.jpg);
   padding-top: 20px;
   width: 100%;
   display: inline-flex;
@@ -139,68 +151,130 @@ a {
   display: flex;
 }
 
-#eventType {
-  display: flex;
-  flex-direction: column;
-  margin-left: 20px;
-}
-
-.event {
-  width: 90px;
-  height: 35px;
-  background-color: rgb(242, 245, 249);
-  margin-bottom: 10px;
-  border-radius: 4px;
-  border: none;
-  color: rgb(172, 178, 188);
-}
-
-.event:hover {
-  background-color: rgb(222, 225, 229);
-}
-
-.event.select {
-  background-color: rgb(222, 225, 229);
-  color: rgb(46, 54, 69);
-  font-weight: 500;
-  border: none;
-}
-
-/* 콘텐츠 영역 */
-#content {
-  display: flex;
-  align-items: center;
-}
-
 #initButton {
   float: right;
   font-size: 14px;
-  border: 1px solid;
-  padding: 8px 10px;
+  color: rgb(64, 72, 84);
+  background-color: rgb(243, 244, 245);
+  font-weight: 500;
+  padding: 6px 12px;
   border-radius: 8px;
   text-align: center;
   align-content: center;
 }
 
 #setData {
+  background-image: url(./assets/backgroud.png);
+  background-repeat: no-repeat;
   margin-left: 20px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
   height: 700px;
-  overflow: auto;
-  border: 1px solid #ccc;
+  /* overflow: auto; */
   min-width: 644px;
   box-sizing: border-box;
+}
+
+.topDiv {
+  display: flex;
+  justify-content: space-between;
+  height: 42px;
+  width: 644px;
+}
+
+#eventType {
+  display: flex;
+  align-items: flex-end;
+  margin-left: 10px;
+}
+
+
+.eventDiv {
+  height: 30px;
+  width: 90px;
+  border-radius: 15px 15px 0px 0px;
+  align-content: center;
+  justify-items: center;
+  border-bottom: 2px solid #342C43;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.select {
+  background-color: #fff;
+  border: 2px solid #342C43;
+  border-bottom: 2px solid #fff;
+}
+.event {
+  font-size: 14px;
+  text-align: center;
+  align-content: center;
+  width: 90px;
+  height: 30px;
+  user-select: none;
+  border-radius: 7px;
+}
+
+.event:hover {
+  background-color: #b3c2f7;
+}
+
+.select > .event:hover {
+  background-color: initial;
+}
+
+
+.btnDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 43px;
+}
+
+.min, .max, .close {
+  height: 26px;
+  width: 26px;
+  margin-right: 10px;
+}
+
+.min {
+  background-image: url(./assets/button-small.svg);
+  /* background-image: url(./assets/min.svg); */
+  background-color: rgb(255, 255, 255);
+}
+
+.max {
+  background-image: url(./assets/button-big.svg);
+  background-color: rgb(250, 234, 155);
+  cursor: pointer;
+  /* background-image: url(./assets/max.svg); */
+}
+
+.close {
+  background-image: url(./assets/button-x.svg);
+  background-color: rgb(235, 185, 212);
+  /* background-image: url(./assets/close.svg); */
 }
 
 .initDiv {
   height: 22px;
 }
 
+.sectionDiv {
+  overflow: auto;
+  padding: 20px;
+  padding-right: 0px;
+  height: 590px;
+  width: 620px;
+}
+
+.section {
+  margin-top: 10px;
+  padding-bottom: 15px;
+}
+
 .sessionTitle {
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.54);
+  color: #8FA7C9;
   letter-spacing: 0.3px;
   padding-bottom: 10px;
 }
@@ -219,21 +293,22 @@ a {
 }
 
 hr {
+  margin: 0px;
   border: none;
-  border-top: 1px solid #ccc;
 }
 
-.dropdown {
+.dropdown, .ecommerceSelect {
+  font-family: 'Neo';
   display: inline;
-  border: solid 1px #dadce0;
-  border-radius: 4px;
+  border: solid 2px #342C43;
+  border-radius: 10px;
   box-shadow: none;
   padding: 0px 0px 0px 12px;
-  height: 29px;
+  height: 30px;
   line-height: 29px;
-  font-size: 13px;
-  width: 230px;
-  margin: 5px 16px 6px 0px;
+  font-size: 15px;
+  width: 232px;
+  margin: 6px 16px 6px 0px;
   appearance: none;
   background-image: url(https://www.gstatic.com/images/icons/material/system/2x/arrow_drop_down_grey600_24dp.png);
   background-position: right 6px center;
@@ -242,7 +317,8 @@ hr {
 }
 
 .dropdown:focus {
-  outline: solid 2px #1a73e8;
+  background: linear-gradient(90deg, #f8f4c9, #f0d1e6, #c9d6f0);
+  outline: none;
 }
 
 label {
@@ -254,48 +330,105 @@ label {
 }
 
 .formInput {
-  border: solid 1px #dadce0;
-  border-radius: 4px;
+  border: solid 2px #342C43;
+  border-radius: 10px;
   padding-left: 12px;
   padding-right: 12px;
   height: 25px;
   line-height: 38px;
   width: 204px;
-  margin: 5px 16px 6px 0px;
-  font-size: 13px;
-  font-family: Roboto, Helvetica Neue, sans-serif;
+  margin: 6px 16px 6px 0px;
+  font-size: 15px;
+  font-family: 'Neo';
 }
 
 .formInput:focus {
-  outline: solid 2px #1a73e8;
+  background: linear-gradient(90deg, #f8f4c9, #f0d1e6, #c9d6f0);
+  outline: none;
 }
 
 .formInput:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
 }
 
+.removeButton {
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  border: 2px solid #342C43;
+  background-color: rgba(162, 180, 254, 0.5);
+  border-radius: 8px;
+  text-align: right;
+  cursor: pointer;
+  user-select: none;
+}
+
+.removeButton:active {
+  transform: translateY(3px); /* 시각적으로 눌린 느낌 */
+}
+
 .addInput {
-  margin: 8px 0px 15px 0px;
-  border-radius: 4px;
-  border-style: solid;
-  border-width: 1px;
+  border: 2px solid #342C43;
+  border-radius: 50px;
+  box-shadow: 0px 3px 0px #342C43;
+  color: #342C43;
+  margin: 8px 10px 15px 0px;
   cursor: pointer;
   font-size: 12px;
   height: 30px;
   letter-spacing: 0.25px;
   padding: 3px 12px;
   background-color: transparent;
-  border-color: #dadce0;
-  color: #1a73e8;
+  user-select: none;
+}
+
+.addInput:active {
+  transform: translateY(3px);
 }
 
 .addInput:hover {
-  background-color: rgba(26, 115, 232, 0.06);
-  border-color: #d2e3fc;
+  background-color: #EBB9D4;
+}
+
+.numInput {
+  background: linear-gradient(90deg, #f8f4c9, #f0d1e6, #c9d6f0);
+  border: 2px solid #342C43;
+  border-radius: 7px;
+  margin-right: 5px;
+  font-size: 16px;
+  height: 20px;
+  color: #342C43;
+  text-align: center;
+}
+
+.numInput:focus {
+  outline: none;
 }
 
 #fireButton {
-  text-align: center;
+  justify-items: center;
+  padding-right: 20px;
+}
+
+#fireButton > div {
+  background-image: url(./assets/button-submit.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #EBB9D4;
+  border: 2px solid #342C43;
+  border-radius: 15px;
+  width: 270px;
+  height: 60px;
+}
+
+#fireButton > div:hover {
+  background-color: rgba(253, 233, 144, 0.5);
+}
+
+#fireButton > div:active {
+  background-color: rgba(162, 180, 254, 0.5);
+  top: 5px;
+  margin-top: 5px;
 }
 
 .tabs {
@@ -307,24 +440,29 @@ label {
 .tab {
   display: flex;
   align-items: center;
-  font-size: small;
-  padding: 3px 5px;
+  height: 24px;
+  font-size: 13px;
+  padding: 0px 5px;
   margin-right: 5px;
-  background-color: #a6cbff;
-  border-radius: 4px;
-  color: #fff;
+  background-color: #A2B4F7;
+  border-radius: 8px;
+  border-radius: 8px;
+  border: 2px solid #342C43;
   cursor: pointer;
+  user-select: none;
+}
+
+.removeDiv:hover {
+  background-color: #8f9dd3;
 }
 
 .tab:hover {
-  background-color: #1a73e8;
+  background-color: #b3c2f7;
 }
 
 .tab.select {
-  background-color: #1a73e8;
-  color: #fff;
+  background-color: #EBB9D4;
   font-weight: bold;
-  border: 2px solid #0a58ca;
 }
 
 .tab span {
@@ -332,19 +470,31 @@ label {
 }
 
 .tab .removeTab {
+  font-size: 18px;
   background: none;
   border: none;
   color: #fff;
   cursor: pointer;
+  line-height: 17px;
 }
 
-.tab .removeTab:hover {
-  color: #db1f1f;
+.removeDiv {
+  background-color: initial;
+  width: 18px;
+  height: 20px;
+  padding-right: 2px;
+  border-radius: 20px;
+}
+
+.select > .removeDiv:hover {
+  background-color: #cea5bb;
 }
 
 .vscode-theme {
   align-self: center;
-  background-color: #282c34; /* Atom One Dark 배경색 */
+  /* background-image: url(./assets/background3.png); */
+  /* background-position:  */
+  background-color: #282c34;
   color: #abb2bf; /* 기본 텍스트 색상 */
   padding: 16px;
   font-family: 'Consolas', 'Courier New', monospace;
@@ -354,7 +504,7 @@ label {
   margin: 0px 20px 0px 50px;
   border-radius: 10px;
   overflow-y: scroll;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   min-width: 400px;
   max-width: 434px;
 }
@@ -390,34 +540,6 @@ label {
 }
 .vscode-theme::-webkit-scrollbar-thumb:hover {
   background-color: #555;
-}
-
-.toggle-button-container {
-  position: relative;
-  width: 200px;
-  height: 140px;
-  box-sizing: border-box;
-}
-
-.toggle-button {
-  position: relative;
-  height: 100px;
-  margin: 20px;
-  background-color: #fff;
-  box-shadow: 0 10px 20px -8px #c5d6d6;
-  border-radius: 4px;
-}
-
-.toggle-button:before {
-  counter-increment: button-counter;
-  content: counter(button-counter);
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  color: #d7e3e3;
-  font-size: 12px;
-  line-height: 1;
-  padding: 5px;
 }
 
 .knob,
@@ -468,54 +590,112 @@ label {
   z-index: 1;
 }
 
-#button-10 .knob:before,
-#button-10 .knob:after,
-#button-10 .knob span {
-  position: absolute;
-  top: 4px;
-  width: 20px;
-  height: 0px;
-  font-size: 10px;
-  font-weight: bold;
+.sectionDiv::-webkit-scrollbar {
+  width: 12px;
+}
+
+.sectionDiv::-webkit-scrollbar-thumb {
+  height: 20%;
+  background-image: url(./assets/scroll.png);
+  background-size: contain;
+  background-repeat: round;
+  margin: 0px -4px 0px 0px;
+}
+
+.sectionDiv::-webkit-scrollbar-track {
+  /* background-color: grey; */
+  /* border-radius: 10px; */
+  /* box-shadow: inset 0px 0px 5px white; */
+}
+
+.toggleButton {
+  width: 22px;
+  height: 24px;
+  line-height: 27px;
+  padding-left: 2px;
+  margin-right: 10px;
   text-align: center;
-  line-height: 0.2;
-  padding: 9px 4px;
-  border-radius: 2px;
-  transition: 0.3s ease all;
+  font-size: 12px;
+  color: #342C43;
+  background-color: #EBB9D4;
+  border: 2px solid #342C43;
+  border-radius: 9px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
 }
 
-#button-10 .knob:before {
-  content: "";
-  left: 4px;
-  background-color: #03a9f4;
+/* 클릭 효과 */
+.toggleButton:active {
+  transform: translateY(3px);
 }
 
-#button-10 .knob:after {
-  content: "Num";
-  right: 4px;
-  color: #4e4e4e;
+/* 활성화 상태 */
+.toggleButton.active {
+  background-color: rgb(250, 234, 155);
 }
 
-#button-10 .knob span {
-  display: inline-block;
-  left: 4px;
-  color: #fff;
-  z-index: 1;
+#addTab {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  padding-left: 7px;
+  border: 2px solid #342C43;
+  background-color: rgba(162, 180, 254, 0.5);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-family: 'Galmuri-Bold';
+  transition: all 0.2s ease;
 }
 
-#button-10 .checkbox:checked + .knob span {
-  color: #4e4e4e;
+#addTab:active {
+  transform: translateY(3px);
 }
 
-#button-10 .checkbox:checked + .knob:before {
-  left: 38px;
-  background-color: #f44336;
+.controls {
+  display: flex;
+  align-items: center;
 }
 
-#button-10 .checkbox:checked + .knob:after {
-  color: #fff;
+.controls > div {
+  display: flex;
 }
 
-#button-10 .checkbox:checked ~ .btn-bg {
-  background-color: #fcebeb;
+.numPlus, .numMinus {
+  font-family: 'Galmuri-Bold';
+  border: 2px solid #342C43;
+  border-radius: 20px;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.numPlus:active, .numMinus:active {
+  transform: translateY(3px);
+}
+
+.numPlus {
+  width: 18px;
+  height: 20px;
+  padding-left: 2px;
+  background-color: #EBB9D4;
+}
+
+.numMinus {
+  font-size: 20px;
+  width: 17px;
+  height: 20px;
+  font-family: 'Galmuri-Bold';
+  padding-left: 3px;
+  margin-left: 6px;
+  line-height: 21px;
+  background-color: #A2B4F7;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

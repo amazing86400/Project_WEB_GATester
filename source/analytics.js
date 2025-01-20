@@ -20,7 +20,7 @@ function sendGAData() {
     const items = gaData.items;
     let eventName;
 
-    if (document.querySelector(".event.select").textContent === "페이지뷰") {
+    if (document.querySelector("#eventType > div.eventDiv.select").innerText === "페이지뷰") {
       eventName = "page_view";
     } else {
       eventName = eventParam["event_name"];
