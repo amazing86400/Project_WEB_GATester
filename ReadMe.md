@@ -54,7 +54,18 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 
 <br>
 
-### 3. 데이터 실시간 미리보기
+### 3. 매개변수 추가
+
+<p align="center">
+ <img src="https://github.com/user-attachments/assets/1415db90-6d22-44ac-b0a5-75eb19089c37" width="50%" />
+</p>
+
+- 숫자 입력란에 원하는 값을 입력한 후 **"매개변수 추가"** 버튼을 클릭하면 해당 수만큼 매개변수가 자동으로 추가됩니다.
+- 이를 통해 다량의 데이터를 신속하게 설정할 수 있어, 보다 효율적인 테스트 환경을 제공합니다.
+
+<br>
+
+### 4. 데이터 실시간 미리보기
 
 <p align="center">
  <img src="https://github.com/user-attachments/assets/f1780afe-a1ce-4088-b288-c830b0b26715" width="50%" />
@@ -65,7 +76,7 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 
 <br>
 
-### 4. 데이터 전송
+### 5. 데이터 전송
 
 <p align="center">
  <img src="https://github.com/user-attachments/assets/828bd7ca-072f-4bdd-9512-83af32fcf797" width="50%" />
@@ -76,7 +87,7 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 
 <br>
 
-### 5. 데이터 자동 입력
+### 6. 데이터 자동 입력
 
 <p align="center">
  <img src="https://github.com/user-attachments/assets/f139a7fc-8970-455b-b06f-b3d8c474cbd7" width="50%" />
