@@ -138,6 +138,7 @@ a {
 .contentContainer {
   /* background-color: rgb(242, 245, 249); */
   background-image: url(./assets/background2.jpg);
+  background-size: cover;
   padding-top: 20px;
   width: 100%;
   display: inline-flex;
