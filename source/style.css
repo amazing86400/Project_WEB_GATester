@@ -335,12 +335,16 @@ label {
   border-radius: 10px;
   padding-left: 12px;
   padding-right: 12px;
-  height: 25px;
+  height: 22px;
   line-height: 38px;
   width: 204px;
   margin: 6px 16px 6px 0px;
+  font-size: 14px;
+  padding-top: 3px;
+}
+
+.formInput.formKey {
   font-size: 15px;
-  font-family: 'Neo';
 }
 
 .formInput:focus {
