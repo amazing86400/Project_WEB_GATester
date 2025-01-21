@@ -157,8 +157,8 @@ function updateDataObject() {
   // 페이지 제목 및 페이지 주소 설정
   const pageTitle = document.getElementById("pageTitle").value;
   const pageURL = document.getElementById("pageURL").value;
-  const titleType = getElement(".titleType").classList.contains('active');
-  const locationType = getElement(".locationType").classList.contains('active');
+  const titleType = getElement(".titleType").classList.contains("active");
+  const locationType = getElement(".locationType").classList.contains("active");
   dataObject.page_title = parseValue(pageTitle, titleType);
   dataObject.page_location = parseValue(pageURL, locationType);
 
@@ -175,7 +175,7 @@ function updateDataObject() {
   transactions.forEach((group) => {
     const dropdown = group.querySelector(".dropdown").value;
     const input = group.querySelector(".formInput").value;
-    const paramType = group.querySelector(".toggleButton").classList.contains('active');
+    const paramType = group.querySelector(".toggleButton").classList.contains("active");
 
     if (dropdown) {
       const value = parseValue(input, paramType);
@@ -197,7 +197,7 @@ function processCustomParameters(selector, dataObject, targetObject) {
   getElements(selector).forEach((group) => {
     const keyInput = group.querySelector(".dropdown")?.value || group.querySelector(".formInput.formKey")?.value;
     const valueInput = group.querySelector(".formInput.formValue")?.value || group.querySelector("select.ecommerceSelect")?.value;
-    const paramType = group.querySelector(".typeToggle")?.classList.contains('active');
+    const paramType = group.querySelector(".typeToggle")?.classList.contains("active");
 
     if (keyInput) {
       const value = parseValue(valueInput, paramType) == undefined ? "" : parseValue(valueInput, paramType);
@@ -218,7 +218,7 @@ function processItems(dataObject) {
   items.forEach((group) => {
     const key = group.querySelector(".dropdown")?.value || group.querySelector(".formInput.formKey")?.value;
     const value = group.querySelector(".formInput.formValue")?.value;
-    const paramType = group.querySelector(".typeToggle")?.classList.contains('active');
+    const paramType = group.querySelector(".typeToggle")?.classList.contains("active");
 
     if (key) {
       products[`id${productIndex}`][key] = parseValue(value, paramType);
@@ -333,7 +333,7 @@ function bindRealTimeUpdate() {
 function setSelectedButton(event) {
   const buttons = getElements("#eventType .eventDiv");
   buttons.forEach((button) => button.classList.remove("select"));
-  const clickedButton = event.target.closest('.eventDiv');
+  const clickedButton = event.target.closest(".eventDiv");
   clickedButton.classList.add("select");
 
   const selectedEvent = clickedButton.innerText;
@@ -472,8 +472,8 @@ function addMultipleInputs(selector, count, name) {
 
 // 타입 토글 함수
 function toggleBtn(button) {
-  button.classList.toggle('active');
-  button.textContent = button.classList.contains('active') ? 'Num' : 'Str';
+  button.classList.toggle("active");
+  button.textContent = button.classList.contains("active") ? "Num" : "Str";
 }
 
 // 삭제 함수
@@ -487,7 +487,7 @@ function removeInput(button) {
 
 // numInput 숫자 증가 함수
 function numPlus(button) {
-  const input = button.closest('.controls').querySelector('.numInput');
+  const input = button.closest(".controls").querySelector(".numInput");
   if (parseInt(input.value) < 201) {
     input.value = parseInt(input.value) + 1;
   }
@@ -495,7 +495,7 @@ function numPlus(button) {
 
 // numInput 숫자 감소 함수
 function numMinus(button) {
-  const input = button.closest('.controls').querySelector('.numInput');
+  const input = button.closest(".controls").querySelector(".numInput");
   if (parseInt(input.value) > 0) {
     input.value = parseInt(input.value) - 1;
   }
@@ -741,7 +741,7 @@ function createInputGroup(key, value) {
       <option value="${key}">${key}</option>
     </select>
     <input class="formInput formValue" type="text" value="${value}" placeholder="값 입력" />
-    <div class="toggleButton titleType ${dataType === "Num" ? "active" : ""}" onclick="toggleBtn(this)">${dataType === "Num" ? "Num" : "Str"}</div>
+    <div class="toggleButton typeToggle ${dataType === "Num" ? "active" : ""}" onclick="toggleBtn(this)">${dataType === "Num" ? "Num" : "Str"}</div>
     <button class="removeButton" onclick="removeInput(this)">x</button>
   `;
 
@@ -753,13 +753,13 @@ function removeProductTab(event) {
   const currentTab = event.target;
 
   // 다른 탭 선택 (첫 번째 탭으로 이동)
-  const previousTab = currentTab.closest('.tab').previousElementSibling;
+  const previousTab = currentTab.closest(".tab").previousElementSibling;
   // const previousTab = currentTab.parentElement.previousElementSibling;
-  const nextTab = currentTab.closest('.tab').nextElementSibling;
+  const nextTab = currentTab.closest(".tab").nextElementSibling;
   // const nextTab = currentTab.parentElement.nextElementSibling;
 
   // 상품 탭 삭제
-  const productIndex = currentTab.closest('.tab').dataset.productIndex;
+  const productIndex = currentTab.closest(".tab").dataset.productIndex;
   // const productIndex = currentTab.parentElement.dataset.productIndex;
   const tab = getElement(`.tab[data-product-index="${productIndex}"]`);
   if (tab) {
