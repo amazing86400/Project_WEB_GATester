@@ -16,7 +16,8 @@
 
 ## 주요 기능
 
-![메인 페이지](https://your-image-url.com/main-page-preview)
+![메인 페이지](https://github.com/user-attachments/assets/7b7c5de5-a1f3-4e24-9007-2c7f0c6fb947)
+
 
 GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 제공합니다.  
 다음과 같은 단계를 통해 GA4 데이터를 손쉽게 설정하고 테스트할 수 있습니다:
@@ -33,7 +34,7 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 ### 1. 이벤트 유형 선택
 
 <p align="center">
- <img src="https://your-image-url.com/event-selection" width="50%" />
+ <img src="https://github.com/user-attachments/assets/1dc84714-7c6b-42e8-801e-0fd9b64204b9" width="50%" />
 </p>
 
 - 페이지뷰, 이벤트, 전자상거래의 이벤트 유형을 손쉽게 선택할 수 있습니다.
@@ -44,7 +45,7 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 ### 2. 매개변수 입력 및 설정
 
 <p align="center">
- <img src="https://your-image-url.com/parameter-input" width="50%" />
+ <img src="https://github.com/user-attachments/assets/4e930b72-d7cf-4ff1-8233-f471855c8585" width="50%" />
 </p>
 
 - 페이지 정보(제목, URL), 사전 정의 및 이벤트 매개변수, 그리고 사용자 속성을 추가할 수 있습니다.
@@ -56,7 +57,7 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 ### 3. 데이터 실시간 미리보기
 
 <p align="center">
- <img src="https://your-image-url.com/data-preview" width="50%" />
+ <img src="https://github.com/user-attachments/assets/f1780afe-a1ce-4088-b288-c830b0b26715" width="50%" />
 </p>
 
 - 설정된 데이터를 JSON 포맷으로 미리보기 영역에서 실시간 확인할 수 있습니다.
@@ -67,10 +68,10 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 ### 4. 데이터 전송
 
 <p align="center">
- <img src="https://your-image-url.com/data-submit" width="50%" />
+ <img src="https://github.com/user-attachments/assets/828bd7ca-072f-4bdd-9512-83af32fcf797" width="50%" />
 </p>
 
-- **"전송" 버튼 클릭 시**, Google Analytics 4로 이벤트 데이터를 전송합니다.
+- **"Submit" 버튼 클릭 시**, Google Analytics 4로 이벤트 데이터를 전송합니다.
 - GA4와 동시에 BigQuery에서 데이터를 확인할 수 있습니다.
 
 <br>
@@ -78,7 +79,7 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 ### 5. 데이터 자동 입력
 
 <p align="center">
- <img src="https://your-image-url.com/data-submit" width="50%" />
+ <img src="https://github.com/user-attachments/assets/f139a7fc-8970-455b-b06f-b3d8c474cbd7" width="50%" />
 </p>
 
 - **우측 상단의 "네모" 버튼**을 클릭하면, 주요 매개변수가 자동으로 입력되어 반복적인 수작업의 번거로움을 줄일 수 있습니다.
@@ -86,4 +87,4 @@ GA Tester는 간편하고 직관적인 이벤트 설정 및 테스트 환경을 
 
 ---
 
-**GA Tester**는 단순한 이벤트 설정 도구를 넘어, 개발자 및 마케터가 GA4 이벤트를 효율적으로 설정하고 테스트할 수 있도록 돕는 강력한 솔루션입니다.
+**GA Tester**는 단순한 이벤트 설정 도구를 넘어, 개발자 및 마케터가 GA4 이벤트를 효율적으로 설정하고 테스트할 수 있도록 돕는 강력한 솔루션입니다. **옴니버그** 확인 시 필터 설정하시는 것을 권장 드립니다.
