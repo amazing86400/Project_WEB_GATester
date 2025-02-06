@@ -800,7 +800,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function contactUs() {
   const url = document.location.pathname;
-  console.log(url);
   if (url.includes("Project_DataInspector")) {
     window.open("https://github.com/amazing86400/Project_WEB_DataInspector");
   } else if (url.includes("Project_WEB_GATester")) {
