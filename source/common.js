@@ -153,6 +153,8 @@ function getClientId() {
 // dataObject 업데이트 함수
 function updateDataObject() {
   const dataObject = {};
+  gaData.eventParam = {};
+  gaData.userProperty = {};
 
   // 페이지 제목 및 페이지 주소 설정
   const pageTitle = document.getElementById("pageTitle").value;
@@ -799,11 +801,11 @@ document.addEventListener("DOMContentLoaded", () => {
 function contactUs() {
   const url = document.location.pathname;
   console.log(url);
-  if (url.includes('Project_DataInspector')) {
-    window.open('https://github.com/amazing86400/Project_WEB_DataInspector');
-  } else if (url.includes('Project_WEB_GATester')) {
-    window.open('https://github.com/amazing86400/Project_WEB_GATester');
-  } else if (url.includes('GTMgenerator')) {
-    window.open('https://github.com/amazing86400/Project_WEB_GTMgenerator');
+  if (url.includes("Project_DataInspector")) {
+    window.open("https://github.com/amazing86400/Project_WEB_DataInspector");
+  } else if (url.includes("Project_WEB_GATester")) {
+    window.open("https://github.com/amazing86400/Project_WEB_GATester");
+  } else if (url.includes("GTMgenerator")) {
+    window.open("https://github.com/amazing86400/Project_WEB_GTMgenerator");
   }
 }
