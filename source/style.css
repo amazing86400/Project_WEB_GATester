@@ -638,12 +638,6 @@ label {
   margin: 0px -4px 0px 0px;
 }
 
-.sectionDiv::-webkit-scrollbar-track {
-  /* background-color: grey; */
-  /* border-radius: 10px; */
-  /* box-shadow: inset 0px 0px 5px white; */
-}
-
 .toggleButton {
   width: 22px;
   height: 24px;
