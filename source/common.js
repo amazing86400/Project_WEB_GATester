@@ -344,6 +344,7 @@ function setSelectedButton(event) {
   if (selectedEvent === "전자상거래") {
     addTransactionSection();
     addItemSection();
+    initializeDragAndDrop("#productData");
   } else {
     removeSection();
   }
@@ -430,6 +431,15 @@ function addInput(type) {
     addButton.insertAdjacentHTML(
       type === "preParam" ? "beforebegin" : "beforeend",
       `<div class="inputGroup">
+        ${
+          type !== "preParam"
+            ? `
+              <button class="dragButton" draggable="true">
+                <img src="./assets/drag.png" alt="드래그 버튼" />
+              </button>
+            `
+            : ""
+        }
         <select class="dropdown">
           ${availableOptions.map((option) => `<option value="${option.value}">${option.text}</option>`).join("")}
         </select>
@@ -438,6 +448,8 @@ function addInput(type) {
         <button class="removeButton" onclick="removeInput(this)">x</button>
       </div>`
     );
+
+    initializeDragAndDrop(config.addButton);
   } else {
     alert("모든 매개변수가 추가되었습니다.");
   }
@@ -458,6 +470,9 @@ function addMultipleInputs(selector, count, name) {
     addButton.insertAdjacentHTML(
       "beforeend",
       `<div class="${className}">
+        <button class="dragButton" draggable="true">
+          <img src="./assets/drag.png" alt="드래그 버튼" />
+        </button>
         <input class="formInput formKey" type="text" value="${name + globalCounters[counterKey]}" />
         <input class="formInput formValue" type="text" placeholder="값 입력" />
         <div class="toggleButton typeToggle ${name === "cm_param" ? "active" : undefined}" onclick="toggleBtn(this)">${name === "cm_param" ? "Num" : "Str"}</div>
@@ -467,6 +482,8 @@ function addMultipleInputs(selector, count, name) {
 
     globalCounters[counterKey]++;
   }
+
+  initializeDragAndDrop(selector);
 
   updateDataObject();
   bindRealTimeUpdate();
@@ -585,6 +602,9 @@ function addTransactionSection() {
       <div class="sessionTitle">거래 매개변수</div>
       <div id="transactionData">
         <div class="inputGroup">
+          <button class="dragButton" draggable="true">
+            <img src="./assets/drag.png" alt="드래그 버튼" />
+          </button>
           <select class="dropdown">
             <option value="currency">currency</option>
           </select>
@@ -622,6 +642,9 @@ function addItemSection() {
       </div>
       <div id="productData">
         <div class="inputGroup">
+          <button class="dragButton" draggable="true">
+            <img src="./assets/drag.png" alt="드래그 버튼" />
+          </button>
           <select class="dropdown formKey">
             <option value="item_id">item_id</option>
           </select>
@@ -630,6 +653,9 @@ function addItemSection() {
           <button class="removeButton" onclick="removeInput(this)">x</button>
         </div>
         <div class="inputGroup">
+          <button class="dragButton" draggable="true">
+            <img src="./assets/drag.png" alt="드래그 버튼" />
+          </button>
           <select class="dropdown formKey">
             <option value="item_name">item_name</option>
           </select>
@@ -739,6 +765,9 @@ function createInputGroup(key, value) {
   inputGroup.classList.add("inputGroup");
 
   inputGroup.innerHTML = `
+    <button class="dragButton" draggable="true">
+      <img src="./assets/drag.png" alt="드래그 버튼" />
+    </button>
     <select class="dropdown formKey">
       <option value="${key}">${key}</option>
     </select>
@@ -797,6 +826,45 @@ document.addEventListener("DOMContentLoaded", () => {
   updateDataObject();
   bindRealTimeUpdate();
 });
+
+const sortableInstances = {}; // 섹션별 Sortable 인스턴스를 저장
+
+function initializeDragAndDrop(containerSelector) {
+  const container = document.querySelector(containerSelector);
+
+  if (container) {
+    if (sortableInstances[containerSelector]) {
+      console.log(`이미 초기화된 인스턴스가 있습니다: ${containerSelector}, 인스턴스를 유지합니다.`);
+      return;
+    }
+
+    // 새로운 Sortable 인스턴스 생성 및 저장
+    sortableInstances[containerSelector] = new Sortable(container, {
+      animation: 150,
+      handle: ".dragButton", // 드래그 핸들러로 사용할 클래스
+      ghostClass: "dragging", // 드래그 중인 요소에 적용할 클래스
+      filter: ".sessionTitle", // 드래그 금지 요소
+      preventOnFilter: true, // 금지된 요소에서 이벤트 차단
+
+      onStart: (evt) => {
+        evt.item.classList.add("dragging");
+      },
+
+      onMove: (evt) => {
+        return !(evt.related && evt.related.classList.contains("sessionTitle"));
+      },
+
+      onEnd: (evt) => {
+        evt.item.classList.remove("dragging");
+        updateDataObject();
+      },
+    });
+
+    console.log(`Sortable initialized for: ${containerSelector}`);
+  } else {
+    console.error(`컨테이너를 찾을 수 없습니다: ${containerSelector}. HTML 구조를 확인하세요.`);
+  }
+}
 
 function contactUs() {
   const url = document.location.pathname;

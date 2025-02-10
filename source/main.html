@@ -7,16 +7,22 @@
     <link rel="apple-touch-icon" href="assets/faviLogo.png" />
     <link rel="stylesheet" href="./style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVYW8HV971"></script>
     <script src="./analytics.js"></script>
     <script src="./common.js"></script>
     <title>GA Tester</title>
     <script>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-NSKTZSJW');
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NSKTZSJW");
     </script>
   </head>
   <body>
@@ -103,6 +109,9 @@
                   <div id="eventGroup">
                     <div class="sessionTitle">이벤트 매개변수</div>
                     <div class="parameterGroup">
+                      <button class="dragButton" draggable="true">
+                        <img src="./assets/drag.png" alt="드래그 버튼" />
+                      </button>
                       <input class="formInput formKey" type="text" value="ep_param1" />
                       <input class="formInput formValue" type="text" placeholder="값 입력" />
                       <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
@@ -123,6 +132,9 @@
                   <div id="userGroup">
                     <div class="sessionTitle">사용자 속성</div>
                     <div class="parameterGroup">
+                      <button class="dragButton" draggable="true">
+                        <img src="./assets/drag.png" alt="드래그 버튼" />
+                      </button>
                       <input class="formInput formKey" type="text" value="up_param1" />
                       <input class="formInput formValue" type="text" placeholder="값 입력" />
                       <div class="toggleButton typeToggle" onclick="toggleBtn(this)">Str</div>
@@ -142,7 +154,7 @@
                   <div onclick="sendGAData()"></div>
                 </div>
               </div>
-              </div>
+            </div>
           </div>
         </div>
         <div id="viewData" class="vscode-theme"></div>

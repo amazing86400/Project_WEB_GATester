@@ -4,27 +4,27 @@
 }
 
 @font-face {
-  font-family: 'Neo Pro';
-  src:url('./assets/NeoDunggeunmoPro-Regular.woff2') format('woff2');
-} 
+  font-family: "Neo Pro";
+  src: url("./assets/NeoDunggeunmoPro-Regular.woff2") format("woff2");
+}
 
 @font-face {
-  font-family: 'Neo';
-  src:url('./assets/neodgm_code.woff2') format('woff2');
-} 
+  font-family: "Neo";
+  src: url("./assets/neodgm_code.woff2") format("woff2");
+}
 
 @font-face {
-  font-family: 'Galmuri';
-  src:url('./assets/Galmuri11.woff2') format('woff2');
-} 
+  font-family: "Galmuri";
+  src: url("./assets/Galmuri11.woff2") format("woff2");
+}
 
 @font-face {
-  font-family: 'Galmuri-Bold';
-  src:url('./assets/Galmuri11-Bold.woff2') format('woff2');
-} 
+  font-family: "Galmuri-Bold";
+  src: url("./assets/Galmuri11-Bold.woff2") format("woff2");
+}
 
 * {
-  font-family: 'Neo';
+  font-family: "Neo";
 }
 
 html {
@@ -187,14 +187,13 @@ a {
   margin-left: 10px;
 }
 
-
 .eventDiv {
   height: 30px;
   width: 90px;
   border-radius: 15px 15px 0px 0px;
   align-content: center;
   justify-items: center;
-  border-bottom: 2px solid #342C43;
+  border-bottom: 2px solid #342c43;
   margin: 0px;
   padding: 0px;
   cursor: pointer;
@@ -202,7 +201,7 @@ a {
 
 .select {
   background-color: #fff;
-  border: 2px solid #342C43;
+  border: 2px solid #342c43;
   border-bottom: 2px solid #fff;
 }
 .event {
@@ -223,7 +222,6 @@ a {
   background-color: initial;
 }
 
-
 .btnDiv {
   display: flex;
   align-items: center;
@@ -231,7 +229,9 @@ a {
   height: 43px;
 }
 
-.min, .max, .close {
+.min,
+.max,
+.close {
   height: 26px;
   width: 26px;
   margin-right: 10px;
@@ -275,12 +275,13 @@ a {
 
 .sessionTitle {
   font-size: 14px;
-  color: #8FA7C9;
+  color: #8fa7c9;
   letter-spacing: 0.3px;
   padding-bottom: 10px;
 }
 
-.inputGroup, .parameterGroup {
+.inputGroup,
+.parameterGroup {
   display: flex;
   align-items: center;
 }
@@ -298,10 +299,11 @@ hr {
   border: none;
 }
 
-.dropdown, .ecommerceSelect {
-  font-family: 'Neo';
+.dropdown,
+.ecommerceSelect {
+  font-family: "Neo";
   display: inline;
-  border: solid 2px #342C43;
+  border: solid 2px #342c43;
   border-radius: 10px;
   box-shadow: none;
   padding: 0px 0px 0px 12px;
@@ -331,7 +333,7 @@ label {
 }
 
 .formInput {
-  border: solid 2px #342C43;
+  border: solid 2px #342c43;
   border-radius: 10px;
   padding-left: 12px;
   padding-right: 12px;
@@ -356,11 +358,36 @@ label {
   -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
 }
 
+.dragButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 25px;
+  margin-right: 2px;
+  border: none;
+  padding: 0;
+  background: none;
+  opacity: 0.7;
+  cursor: grab;
+  user-select: none;
+}
+
+.dragButton:active {
+  cursor: grabbing;
+}
+
+.dragButton img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .removeButton {
   width: 28px;
   height: 28px;
   font-size: 20px;
-  border: 2px solid #342C43;
+  border: 2px solid #342c43;
   background-color: rgba(162, 180, 254, 0.5);
   border-radius: 8px;
   text-align: right;
@@ -373,10 +400,10 @@ label {
 }
 
 .addInput {
-  border: 2px solid #342C43;
+  border: 2px solid #342c43;
   border-radius: 50px;
-  box-shadow: 0px 3px 0px #342C43;
-  color: #342C43;
+  box-shadow: 0px 3px 0px #342c43;
+  color: #342c43;
   margin: 8px 10px 15px 0px;
   cursor: pointer;
   font-size: 12px;
@@ -392,17 +419,21 @@ label {
 }
 
 .addInput:hover {
-  background-color: #EBB9D4;
+  background-color: #ebb9d4;
+}
+
+#transaction > .addInput {
+  margin-left: 22px;
 }
 
 .numInput {
   background: linear-gradient(90deg, #f8f4c9, #f0d1e6, #c9d6f0);
-  border: 2px solid #342C43;
+  border: 2px solid #342c43;
   border-radius: 7px;
   margin-right: 5px;
   font-size: 16px;
   height: 20px;
-  color: #342C43;
+  color: #342c43;
   text-align: center;
 }
 
@@ -419,8 +450,8 @@ label {
   background-image: url(./assets/button-submit.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #EBB9D4;
-  border: 2px solid #342C43;
+  background-color: #ebb9d4;
+  border: 2px solid #342c43;
   border-radius: 15px;
   width: 270px;
   height: 60px;
@@ -449,10 +480,10 @@ label {
   font-size: 13px;
   padding: 0px 5px;
   margin-right: 5px;
-  background-color: #A2B4F7;
+  background-color: #a2b4f7;
   border-radius: 8px;
   border-radius: 8px;
-  border: 2px solid #342C43;
+  border: 2px solid #342c43;
   cursor: pointer;
   user-select: none;
 }
@@ -466,7 +497,7 @@ label {
 }
 
 .tab.select {
-  background-color: #EBB9D4;
+  background-color: #ebb9d4;
   font-weight: bold;
 }
 
@@ -502,7 +533,7 @@ label {
   background-color: #282c34;
   color: #abb2bf; /* 기본 텍스트 색상 */
   padding: 16px;
-  font-family: 'Consolas', 'Courier New', monospace;
+  font-family: "Consolas", "Courier New", monospace;
   overflow: auto;
   max-height: 600px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -621,9 +652,9 @@ label {
   margin-right: 10px;
   text-align: center;
   font-size: 12px;
-  color: #342C43;
-  background-color: #EBB9D4;
-  border: 2px solid #342C43;
+  color: #342c43;
+  background-color: #ebb9d4;
+  border: 2px solid #342c43;
   border-radius: 9px;
   cursor: pointer;
   user-select: none;
@@ -645,12 +676,12 @@ label {
   height: 28px;
   font-size: 13px;
   padding-left: 7px;
-  border: 2px solid #342C43;
+  border: 2px solid #342c43;
   background-color: rgba(162, 180, 254, 0.5);
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
-  font-family: 'Galmuri-Bold';
+  font-family: "Galmuri-Bold";
   transition: all 0.2s ease;
 }
 
@@ -661,15 +692,17 @@ label {
 .controls {
   display: flex;
   align-items: center;
+  margin-left: 22px;
 }
 
 .controls > div {
   display: flex;
 }
 
-.numPlus, .numMinus {
-  font-family: 'Galmuri-Bold';
-  border: 2px solid #342C43;
+.numPlus,
+.numMinus {
+  font-family: "Galmuri-Bold";
+  border: 2px solid #342c43;
   border-radius: 20px;
   text-align: center;
   user-select: none;
@@ -677,7 +710,8 @@ label {
   transition: all 0.2s ease;
 }
 
-.numPlus:active, .numMinus:active {
+.numPlus:active,
+.numMinus:active {
   transform: translateY(3px);
 }
 
@@ -685,18 +719,18 @@ label {
   width: 18px;
   height: 20px;
   padding-left: 2px;
-  background-color: #EBB9D4;
+  background-color: #ebb9d4;
 }
 
 .numMinus {
   font-size: 20px;
   width: 17px;
   height: 20px;
-  font-family: 'Galmuri-Bold';
+  font-family: "Galmuri-Bold";
   padding-left: 3px;
   margin-left: 6px;
   line-height: 21px;
-  background-color: #A2B4F7;
+  background-color: #a2b4f7;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
