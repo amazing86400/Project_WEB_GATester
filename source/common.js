@@ -33,6 +33,8 @@ const transactionObject = {
   tax: 1000,
   shipping: 1000,
   coupon: "거래 할인 쿠폰",
+  payment_info: "신용카드",
+  shipping_tier: "항공",
 };
 
 // 상품 데이터 초기값
@@ -371,7 +373,7 @@ function addInput(type) {
     transaction: {
       selector: "#transaction div.inputGroup",
       addButton: "#transactionData",
-      limitCnt: () => 6,
+      limitCnt: () => 8,
       allOptions: [
         { value: "currency", text: "currency", type: "Str" },
         { value: "transaction_id", text: "transaction_id", type: "Str" },
@@ -379,6 +381,8 @@ function addInput(type) {
         { value: "tax", text: "tax", type: "Num" },
         { value: "shipping", text: "shipping", type: "Num" },
         { value: "coupon", text: "coupon", type: "Str" },
+        { value: "payment_type", text: "payment_type", type: "Str" },
+        { value: "shipping_tier", text: "shipping_tier", type: "Str" },
       ],
     },
     items: {
